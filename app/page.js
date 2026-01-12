@@ -130,9 +130,9 @@ export default function Home() {
               ]}
             />
 
-            <main className="flex flex-col p-8 w-[1180px]">
+            <main className="flex flex-col p-8 w-[1180px] gap-8">
               <Me ref={meRef} />
-              <div ref={skillsRef}></div>
+              <Skills ref={skillsRef}/>
               <div ref={projectsRef}></div>
               <div ref={project1Ref}></div>
               <div ref={project2Ref}></div>
