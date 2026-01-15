@@ -41,15 +41,66 @@ export default function Home() {
 
   const [activeNavKey, setActiveNavKey] = useState("me");
 
+  useEffect(() => {
+    const container = mainRef.current || window;
+
+    const sections = [
+      { key: "me", ref: meRef, offset: 20 },
+      { key: "skills", ref: skillsRef, offset: 15 },
+      { key: "projects", ref: projectsRef, offset: 15 },
+      { key: "project3", ref: project1Ref, offset: 15 },
+      { key: "project2", ref: project2Ref, offset: 15 },
+      { key: "project1", ref: project3Ref, offset: 15 },
+      { key: "achievements", ref: achievementsRef, offset: 15 },
+      { key: "education", ref: educationRef, offset: 15 },
+      { key: "contact", ref: contactRef, offset: 15 },
+    ];
+
+    const handleScroll = () => {
+      const containerRect =
+        container === window
+          ? { top: 0, height: window.innerHeight }
+          : container.getBoundingClientRect();
+
+      let closestKey = null;
+      let smallestDistance = Infinity;
+
+      sections.forEach((section) => {
+        const el = section.ref.current;
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        const distance = Math.abs(
+          rect.top - containerRect.top - (section.offset ?? 0)
+        );
+
+        if (distance < smallestDistance) {
+          smallestDistance = distance;
+          closestKey = section.key;
+        }
+      });
+
+      if (closestKey) {
+        setActiveNavKey((prev) => (prev === closestKey ? prev : closestKey));
+      }
+    };
+
+    handleScroll();
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="bg-zinc-900 dark:bg-black">
       <div className="w-full h-screen relative">
-      
 
         <Beams />
 
         <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
+          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] bg-[#00000030] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
             {/* Header stays at top */}
             <div className="w-full h-[30px] border-b-zinc-700 border-b">
               <div className="hidden lg:block h-full w-[250px] border-e border-e-zinc-700"></div>
@@ -134,7 +185,7 @@ export default function Home() {
 
               <main
                 ref={mainRef}
-                className="flex flex-col gap-8 p-6 sm:p-8 lg:p-10 w-full lg:w-[1180px] flex-1 overflow-y-scroll no-scrollbar custom-scrollbar"
+                className="flex flex-col gap-8 p-6 sm:p-8 lg:p-10 w-full lg:w-[1180px]  flex-1 overflow-y-scroll no-scrollbar custom-scrollbar"
               >
                 <Me ref={meRef} />
                 <Skills ref={skillsRef} />

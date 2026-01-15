@@ -6,7 +6,7 @@ const Me = forwardRef(function Me(props, ref) {
     <div ref={ref} className="">
       <p className="text-stone-100 font-medium mb-3">Me</p>
 
-      <div className="bg-[#11111150] border border-white/5 rounded-4xl p-5 sm:p-6 flex flex-col gap-6 md:gap-10 lg:flex-row lg:justify-between lg:gap-20">
+      <div className="bg-[#00000095] border border-white/5 rounded-4xl p-5 sm:p-6 flex flex-col gap-6 md:gap-10 lg:flex-row lg:justify-between lg:gap-20">
         <div className="order-2 lg:order-1">
           <h1 className="text-stone-100 text-2xl sm:text-3xl font-medium">
             Md. Raihan Hossen

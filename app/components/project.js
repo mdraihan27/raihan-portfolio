@@ -56,7 +56,7 @@ const Project = forwardRef(function Project(
 
   return (
     <section ref={ref} className="scroll-mt-24">
-      <div className="bg-[#11111190] border border-white/5 rounded-3xl p-5 sm:p-6 md:p-8 w-full text-stone-100 shadow-[0_24px_80px_rgba(0,0,0,0.85)]">
+      <div className="bg-[#00000095] border border-white/5 rounded-3xl p-5 sm:p-6 md:p-8 w-full text-stone-100 shadow-[0_24px_80px_rgba(0,0,0,0.85)]">
         <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
           <div className="space-y-4 md:w-[34%]">
             {/* {title && (

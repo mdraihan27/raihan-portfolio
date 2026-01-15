@@ -5,7 +5,7 @@ const Skills = forwardRef(function Skills(props, ref) {
   return (
     <div ref={ref} className="">
       <p className="text-stone-100 font-medium mb-3">My Skills</p>
-      <div className="bg-[#11111150] rounded-4xl border border-white/5 p-5 sm:p-6 w-full text-stone-300">
+      <div className="bg-[#00000095] rounded-4xl border border-white/5 p-5 sm:p-6 w-full text-stone-300">
         <div className="w-full">
           <p className="w-full text-center mb-3 text-sm sm:text-base">Frontend</p>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-5">
