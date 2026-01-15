@@ -123,3 +123,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Utility to hide scrollbar but keep scrolling */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Custom thin dark orange scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ff791a1a #05051000; /* thumb track */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #05051000;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ff791a1a;
+  border-radius: 9999px;
+}

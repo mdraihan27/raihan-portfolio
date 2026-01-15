@@ -1,9 +1,10 @@
-export function Nav({ navItems, className, activeKey, onChangeActive }) {
+export function Nav({ navItems, className, activeKey, onChangeActive, scrollContainerRef }) {
   return (
     <div
-      className={`flex flex-col w-[250px] text-lg gap-5 text-left items-start pt-8 ps-8 font-medium border-e border-e-zinc-700 ${
-        className ?? ""
-      }`}
+      className={`flex overflow-x-auto no-scrollbar gap-3 px-4 py-3 border-b border-b-zinc-700 text-sm items-center font-medium bg-transparent
+        lg:overflow-visible lg:flex-col lg:w-[250px] lg:text-lg lg:gap-5 lg:text-left lg:items-start lg:pt-8 lg:ps-8 lg:border-b-0 lg:border-e lg:border-e-zinc-700 ${
+          className ?? ""
+        }`}
     >
       {navItems.map((navItem) => (
         <NavItem
@@ -14,6 +15,7 @@ export function Nav({ navItems, className, activeKey, onChangeActive }) {
           Icon={navItem.icon}
           type={navItem.type}
           isActive={activeKey === navItem.key}
+          scrollContainerRef={scrollContainerRef}
           onActivate={() => onChangeActive && onChangeActive(navItem.key)}
         />
       ))}
@@ -21,22 +23,55 @@ export function Nav({ navItems, className, activeKey, onChangeActive }) {
   );
 }
 
-export function NavItem({ itemName, targetRef, offset, Icon, type, isActive, onActivate }) {
+export function NavItem({
+  itemName,
+  targetRef,
+  offset,
+  Icon,
+  type,
+  isActive,
+  scrollContainerRef,
+  onActivate,
+}) {
   return (
     <button
-      className={`flex items-center gap-2 cursor-pointer transition-transform duration-150 active:scale-95 active:translate-y-[1px] ${
-        isActive ? "text-amber-700" : "text-stone-300 hover:text-stone-500 "
-      } ${type == "project" ? "ms-8" : ""}`}
+      className={`flex items-center gap-2 cursor-pointer whitespace-nowrap rounded-full px-3 py-1.5 border border-transparent text-xs sm:text-sm transition-transform duration-150 active:scale-95 active:translate-y-[1px]
+        ${
+          isActive
+            ? "bg-amber-900/40 text-amber-300 border-amber-700/60"
+            : "text-stone-200 bg-white/5 hover:bg-white/10 hover:text-stone-50"
+        }
+        ${type == "project" ? "lg:ms-8" : ""}
+        lg:rounded-none lg:px-0 lg:py-0 lg:bg-transparent lg:border-none lg:text-base lg:hover:bg-transparent
+        ${isActive ? " lg:text-amber-700" : " lg:text-stone-300 lg:hover:text-stone-500"}`}
       onClick={() => {
         if (!targetRef.current) return;
+        const container = scrollContainerRef?.current ?? window;
 
-        const elementTop = targetRef.current.getBoundingClientRect().top;
-        const scrollY = window.scrollY + elementTop - offset;
+        const canScrollContainer =
+          container !== window && container.scrollHeight > container.clientHeight;
 
-        window.scrollTo({
-          top: scrollY,
-          behavior: "smooth",
-        });
+        if (!canScrollContainer) {
+          const elementTop = targetRef.current.getBoundingClientRect().top;
+          const scrollY = window.scrollY + elementTop - (offset ?? 0);
+
+          window.scrollTo({
+            top: scrollY,
+            behavior: "smooth",
+          });
+        } else {
+          const elementRect = targetRef.current.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const currentScrollTop = container.scrollTop;
+
+          const targetScrollTop =
+            currentScrollTop + (elementRect.top - containerRect.top) - (offset ?? 0);
+
+          container.scrollTo({
+            top: targetScrollTop,
+            behavior: "smooth",
+          });
+        }
 
         if (onActivate) {
           onActivate();

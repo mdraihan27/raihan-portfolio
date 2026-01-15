@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import Antigravity from "../components/Antigravity";
+
 import { Nav } from "./components/nav";
 import Skills from "./components/skills";
 import Contact from "./components/contact";
@@ -9,8 +9,8 @@ import Achievements from "./components/achievements";
 import Education from "./components/education";
 import Project from "./components/project";
 import Me from "./components/me";
+import Beams from "@/components/Beams";
 
-import Silk from "@/components/Silk";
 import {
   User2,
   FolderKanban,
@@ -20,7 +20,7 @@ import {
   Layers,
   Cpu,
   CodeXml,
-  PanelsTopLeft
+  PanelsTopLeft,
 } from "lucide-react";
 
 export default function Home() {
@@ -37,112 +37,263 @@ export default function Home() {
   const educationRef = useRef(null);
   const contactRef = useRef(null);
 
+  const mainRef = useRef(null);
+
   const [activeNavKey, setActiveNavKey] = useState("me");
 
   return (
-    <div className=" bg-zinc-900 dark:bg-black">
+    <div className="bg-zinc-900 dark:bg-black">
       <div className="w-full h-screen relative">
-        <Silk
-          speed={5}
-          scale={1}
-          color="#7b7481"
-          noiseIntensity={3}
-          rotation={0}
-        />
+      
+
+        <Beams />
 
         <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-          <div className="w-[1440px] h-7/8 backdrop-blur-[35px]  border-[#ff4500] rounded-2xl flex flex-col">
-          <div className="w-full h-[30px] border-b-zinc-700 border-b">
-            <div className="h-full w-[250px] border-e border-e-zinc-700"></div>
-          </div>
-          <div className="flex h-full">
-            <Nav
-            className=""
-              activeKey={activeNavKey}
-              onChangeActive={setActiveNavKey}
-              navItems={[
-                {
-                  itemName: "Me",
-                  targetRef: meRef,
-                  offSet: 0,
-                  key: "me",
-                  icon: User2,
-                },
-                {
-                  itemName: "Skills",
-                  targetRef: skillsRef,
-                  offSet: 0,
-                  key: "skills",
-                  icon: CodeXml,
-                },
-                {
-                  itemName: "Projects",
-                  targetRef: projectsRef,
-                  offSet: 0,
-                  key: "projects",
-                  icon: PanelsTopLeft,
-                },
-                {
-                  itemName: "Neuraletter",
-                  targetRef: project1Ref,
-                  type: "project",
-                  offSet: 0,
-                  key: "project1",
-                  // icon: Layers,
-                },
-                {
-                  itemName: "Ballotguard",
-                  targetRef: project2Ref,
-                  type: "project",
-                  offSet: 0,
-                  key: "project2",
-                  // icon: Cpu,
-                },
-                {
-                  itemName: "Everything Image",
-                  targetRef: project3Ref,
-                  type: "project",
-                  offSet: 0,
-                  key: "project3",
-                  // icon: Layers,
-                },
-                {
-                  itemName: "Achievements",
-                  targetRef: achievementsRef,
-                  offSet: 0,
-                  key: "achievements",
-                  icon: Award,
-                },
-                {
-                  itemName: "Education",
-                  targetRef: educationRef,
-                  offSet: 0,
-                  key: "education",
-                  icon: GraduationCap,
-                },
-                {
-                  itemName: "Contact",
-                  targetRef: contactRef,
-                  offSet: 0,
-                  key: "contact",
-                  icon: Mail,
-                },
-              ]}
-            />
+          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
+            {/* Header stays at top */}
+            <div className="w-full h-[30px] border-b-zinc-700 border-b">
+              <div className="hidden lg:block h-full w-[250px] border-e border-e-zinc-700"></div>
+            </div>
+            {/* Content area: nav + main, main scrolls */}
+            <div className="flex flex-1 min-h-0 flex-col lg:flex-row">
+              <Nav
+                className=""
+                activeKey={activeNavKey}
+                onChangeActive={setActiveNavKey}
+                scrollContainerRef={mainRef}
+                navItems={[
+                  {
+                    itemName: "Me",
+                    targetRef: meRef,
+                    offSet: 20,
+                    key: "me",
+                    icon: User2,
+                  },
+                  {
+                    itemName: "Skills",
+                    targetRef: skillsRef,
+                    offSet: 15,
+                    key: "skills",
+                    icon: CodeXml,
+                  },
+                  {
+                    itemName: "Projects",
+                    targetRef: projectsRef,
+                    offSet: 15,
+                    key: "projects",
+                    icon: PanelsTopLeft,
+                  },
 
-            <main className="flex flex-col p-8 w-[1180px] gap-8">
-              <Me ref={meRef} />
-              <Skills ref={skillsRef}/>
-              <div ref={projectsRef}></div>
-              <div ref={project1Ref}></div>
-              <div ref={project2Ref}></div>
-              <div ref={project3Ref}></div>
-              <div ref={achievementsRef}></div>
-              <div ref={educationRef}></div>
-              <div ref={contactRef}></div>
-            </main>
+                  {
+                    itemName: "Everything Image",
+                    targetRef: project1Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project3",
+                    // icon: Layers,
+                  },
+                  {
+                    itemName: "Ballotguard",
+                    targetRef: project2Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project2",
+                    // icon: Cpu,
+                  },
+                  {
+                    itemName: "Neuraletter",
+                    targetRef: project3Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project1",
+                    // icon: Layers,
+                  },
+                  {
+                    itemName: "Achievements",
+                    targetRef: achievementsRef,
+                    offSet: 15,
+                    key: "achievements",
+                    icon: Award,
+                  },
+                  {
+                    itemName: "Education",
+                    targetRef: educationRef,
+                    offSet: 15,
+                    key: "education",
+                    icon: GraduationCap,
+                  },
+                  {
+                    itemName: "Contact",
+                    targetRef: contactRef,
+                    offSet: 15,
+                    key: "contact",
+                    icon: Mail,
+                  },
+                ]}
+              />
+
+              <main
+                ref={mainRef}
+                className="flex flex-col gap-8 p-6 sm:p-8 lg:p-10 w-full lg:w-[1180px] flex-1 overflow-y-scroll no-scrollbar custom-scrollbar"
+              >
+                <Me ref={meRef} />
+                <Skills ref={skillsRef} />
+                <div ref={projectsRef}>
+                  <p className="text-stone-100 font-medium mb-3">Projects</p>
+
+                  <div className="flex flex-col gap-8">
+                    <Project
+                      ref={project1Ref}
+                      title="Everything Image"
+                      subtitle="The ultimate tool for quick image fixes. Easily convert, compress, crop, resize, edit, remove backgrounds, add watermark, add text over, blur and enhance image resolution. All in one place."
+                      link="https://everything-image.tech/"
+                      tags={["Next.js", "Tailwind CSS"]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/everything-image/ei-landing.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-add-text.png",
+                          alt: "Add Text Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-convert.png",
+                          alt: "Convert Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-pro-editor.png",
+                          alt: "Pro Editor Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-watermark.png",
+                          alt: "Add Watermark Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-crop.png",
+                          alt: "Crop & Resize Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-about.png",
+                          alt: "About Page",
+                        },
+                        {
+                          src: "/assets/images/projects/everything-image/ei-contact.png",
+                          alt: "Contact Page",
+                        },
+                      ]}
+                    />
+                    <Project
+                      ref={project2Ref}
+                      title="Ballotguard"
+                      subtitle="The perfect online voting system. Enforces single person single vote principle by sending a private voting link to each voters email. Can perform open elections too which operates based on a public link."
+                      link="https://ballotguard.vercel.app/"
+                      tags={[
+                        "Next.js",
+                        "Springboot",
+                        "Tailwind",
+                        "MongoDB",
+                        "Spring Security",
+                      ]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-landing.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-signup.png",
+                          alt: "Signup Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-dashboard.png",
+                          alt: "Dashboard Page",
+                        },
+
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-name.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-layout.png",
+                          alt: "Landing Page",
+                        },
+
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-schedule.png",
+                          alt: "Landing Page",
+                        },
+
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-options.png",
+                          alt: "Landing Page",
+                        },
+
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-draft.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-election-info.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-edit-election.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-profile.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/bg-cast-vote.png",
+                          alt: "Landing Page",
+                        },
+                      ]}
+                    />
+                    <Project
+                      ref={project3Ref}
+                      title="Neuraletter"
+                      subtitle="An AI-native newsletter workspace
+                that lets you compose, iterate, and ship issues with a
+                cinematic, distraction-free editor. Crafted to feel like a
+                design tool, but moves at the speed of code."
+                      link="https://neuraletter.vercel.app/"
+                      tags={[
+                        "Next.js",
+                        "Fast API",
+                        "Mistral AI",
+                        "PostgreSQL",
+                        "Digital Ocean",
+                        "Nginx",
+                      ]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/neuraletter/nl-1.png",
+                          alt: "Neuraletter 1",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/nl-2.png",
+                          alt: "Neuraletter 2",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/nl-3.png",
+                          alt: "Neuraletter 3",
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+
+                <Achievements ref={achievementsRef} />
+                <Education ref={educationRef} />
+                <div ref={contactRef} className="mb-16 lg:mb-[817px]">
+                  <p className="text-stone-100 font-medium mb-3">Contact</p>
+
+                  <Contact />
+                </div>
+              </main>
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>

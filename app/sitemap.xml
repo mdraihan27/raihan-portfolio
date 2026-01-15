@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>https://raihanhossen.site/</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+
+	<!-- Favicon and app icon assets so crawlers see your branding files -->
+	<url>
+		<loc>https://raihanhossen.site/favicon.ico</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://raihanhossen.site/favicon-32x32.png</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://raihanhossen.site/favicon-16x16.png</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://raihanhossen.site/apple-touch-icon.png</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://raihanhossen.site/android-chrome-192x192.png</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://raihanhossen.site/android-chrome-512x512.png</loc>
+		<lastmod>2026-01-15</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+</urlset>
+
