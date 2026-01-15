@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const SITE_URL = "https://raihanhossen.site";
-const PROFILE_IMAGE_URL = `${SITE_URL}/assets/images/raihan-profile.jpg`;
+const PROFILE_IMAGE_URL = `${SITE_URL}/assets/images/raihan.png`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
