@@ -128,8 +128,10 @@ const Project = forwardRef(function Project(
                           src={slide.src}
                           alt={slide.alt || "Project image"}
                           fill
-                          className="object-contain"
-                          sizes="(max-width: 768px) 100vw, 32rem"
+                        className="object-contain"
+                        loading="eager"
+                        quality={300}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 650px, 750px"
                         />
                       </div>
                     </div>

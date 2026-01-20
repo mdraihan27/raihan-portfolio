@@ -335,7 +335,7 @@ export default function Home() {
                           alt: "Neuraletter 3",
                         },
                         {
-                          src: "/assets/images/projects/neuraletter/neuraletter-3.png",
+                          src: "/assets/images/projects/neuraletter/neuraletter-4.png",
                           alt: "Neuraletter 4",
                         },
                       ]}
@@ -345,7 +345,7 @@ export default function Home() {
 
                 <Achievements ref={achievementsRef} />
                 <Education ref={educationRef} />
-                <div ref={contactRef} className="mb-16 ">
+                <div ref={contactRef} className="mb-16 lg:mb-[605px]">
                   <p className="text-stone-100 font-medium mb-3">Contact</p>
 
                   <Contact />
