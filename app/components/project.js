@@ -1,8 +1,8 @@
 "use client";
 
-import { forwardRef, useState, useMemo } from "react";
+import { forwardRef, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const fallbackImages = [
   {
@@ -20,29 +20,11 @@ const fallbackImages = [
 ];
 
 const Project = forwardRef(function Project(
-  {
-    title,
-    subtitle,
-    link,
-    linkLabel = "View project",
-    images = [],
-    tags = [],
-  },
-  ref
+  { title, subtitle, link,link2, link2Label = "GitHub", linkLabel = "View project", images = [], tags = [] },
+  ref,
 ) {
   const slides = images.length ? images : fallbackImages;
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { prevIndex, nextIndex } = useMemo(() => {
-    const length = slides.length;
-    if (!length) {
-      return { prevIndex: 0, nextIndex: 0 };
-    }
-    return {
-      prevIndex: (currentIndex - 1 + length) % length,
-      nextIndex: (currentIndex + 1) % length,
-    };
-  }, [currentIndex, slides.length]);
 
   const goPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
@@ -83,12 +65,27 @@ const Project = forwardRef(function Project(
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium text-orange-300 hover:text-orange-200 mt-1 group"
+                className="inline-flex items-center gap-2 text-sm font-medium text-orange-300 hover:text-orange-200 mt-1 group me-3"
               >
-                <span className="relative inline-flex items-center gap-2 rounded-full border border-orange-500/50 bg-gradient-to-r from-orange-500/20 via-transparent to-transparent px-3 py-1.5 backdrop-blur-sm">
+                <span className="relative inline-flex items-center gap-2 rounded-md border border-orange-500/50  px-3 py-1.5 backdrop-blur-sm">
                   <span>{linkLabel}</span>
                   <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   <span className="pointer-events-none absolute inset-0 rounded-full bg-orange-500/10 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                </span>
+              </a>
+            )}
+
+            {link2 && (
+              <a
+                href={link2}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-stone-300 hover:text-stone-200 mt-1 group"
+              >
+                <span className="relative inline-flex items-center gap-2 rounded-md border border-stone-300  px-3 py-1.5 backdrop-blur-sm">
+                  <span>{link2Label}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full bg-stone-500/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
                 </span>
               </a>
             )}
@@ -98,7 +95,7 @@ const Project = forwardRef(function Project(
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-stone-200/90 backdrop-blur-sm"
+                    className="inline-flex items-center rounded-sm border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-stone-200/90 backdrop-blur-sm"
                   >
                     {tag}
                   </span>
@@ -107,85 +104,117 @@ const Project = forwardRef(function Project(
             )}
           </div>
 
-          <div className="md:w-[66%] w-full">
+          <div className="w-full md:w-[650px] lg:w-[750px]">
             {hasSlides && (
-              <div className="relative w-full max-w-3xl mx-auto h-64 sm:h-72 md:h-80 lg:h-[22rem]">
-                {/* Main slide */}
-                <div className="absolute inset-y-3 left-1/2 -translate-x-1/2 w-[76%] sm:w-[70%] md:w-[68%] z-20">
-                  <div className="relative h-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent shadow-[0_24px_80px_rgba(0,0,0,0.9)]">
-                    <Image
-                      src={slides[currentIndex].src}
-                      alt={slides[currentIndex].alt || "Project screenshot"}
-                      fill
-                      priority
-                      sizes="(min-width: 1024px) 600px, 80vw"
-                      className="object-cover select-none"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 mix-blend-multiply" />
-
-                    <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-3 sm:p-4 text-xs sm:text-[13px]">
-                      <div className="flex items-center gap-2 text-white/85">
-                        <span className="inline-flex h-6 px-2 items-center rounded-full bg-black/40 backdrop-blur text-[11px] border border-white/10">
-                          {currentIndex + 1} / {slides.length}
-                        </span>
-                        {/* {title && (
-                          <span className="hidden sm:inline truncate max-w-[10rem] md:max-w-[14rem] text-white/80">
-                            {title}
-                          </span>
-                        )} */}
+              <div
+                id="indicators-carousel"
+                className="relative w-full"
+                data-carousel="static"
+              >
+                {/* Carousel wrapper with fixed height */}
+            <div className="relative h-48 md:h-72 lg:h-96 border-2 border-white/10 overflow-hidden rounded-2xl flex items-center justify-center bg-black/40">
+                  {slides.map((slide, index) => (
+                    <div
+                      key={index}
+                      className={`${
+                        index === currentIndex ? "block" : "hidden"
+                      } duration-700 ease-in-out w-full h-full`}
+                      data-carousel-item={
+                        index === currentIndex ? "active" : undefined
+                      }
+                    >
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <Image
+                          src={slide.src}
+                          alt={slide.alt || "Project image"}
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 32rem"
+                        />
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
 
-                {/* Previous peek */}
+                {/* Slider indicators */}
+                <div className="absolute z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className={`w-2 h-2 rounded-full border border-white/60 transition-colors ${
+                        index === currentIndex
+                          ? "bg-white"
+                          : "bg-white/20 hover:bg-white/40"
+                      }`}
+                      aria-current={index === currentIndex ? "true" : "false"}
+                      aria-label={`Slide ${index + 1}`}
+                      onClick={() => setCurrentIndex(index)}
+                      data-carousel-slide-to={index}
+                    />
+                  ))}
+                </div>
+
+                {/* Slider controls */}
                 <button
                   type="button"
-                  onClick={goPrev}
-                  className="group absolute inset-y-6 left-0 w-[26%] sm:w-[24%] flex items-center justify-start pl-1 z-10"
+                  className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4  group focus:outline-none "
+                  data-carousel-prev
                 >
-                  <div className="relative h-32 sm:h-40 md:h-44 w-full overflow-hidden rounded-2xl border border-white/5 bg-white/5 opacity-60 group-hover:opacity-100 group-hover:-translate-x-0.5 transition-all duration-500 ease-out">
-                    <Image
-                      src={slides[prevIndex].src}
-                      alt={slides[prevIndex].alt || "Previous screenshot"}
-                      fill
-                      sizes="(min-width: 1024px) 220px, 30vw"
-                      className="object-cover scale-[1.02] select-none"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/10 to-transparent" />
-                    <div className="absolute inset-y-0 right-2 flex items-center">
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/70 backdrop-blur border border-white/15 text-white/85 shadow-[0_0_26px_rgba(0,0,0,0.8)]">
-                        <ChevronLeft className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </div>
+                  <span
+                    className="inline-flex items-center justify-center w-10 h-10 bg-[#ffffff10]  cursor-pointer rounded-full group-hover:bg-white/10 "
+                    onClick={goPrev}
+                  >
+                    <svg
+                      className="w-5 h-5 text-white rtl:rotate-180"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m15 19-7-7 7-7"
+                      />
+                    </svg>
+                    <span className="sr-only">Previous</span>
+                  </span>
                 </button>
-
-                {/* Next peek */}
                 <button
                   type="button"
-                  onClick={goNext}
-                  className="group absolute inset-y-6 right-0 w-[26%] sm:w-[24%] flex items-center justify-end pr-1 z-10"
+                  className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                  
+                  data-carousel-next
                 >
-                  <div className="relative h-32 sm:h-40 md:h-44 w-full overflow-hidden rounded-2xl border border-white/5 bg-white/5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-500 ease-out">
-                    <Image
-                      src={slides[nextIndex].src}
-                      alt={slides[nextIndex].alt || "Next screenshot"}
-                      fill
-                      sizes="(min-width: 1024px) 220px, 30vw"
-                      className="object-cover scale-[1.02] select-none"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/10 to-transparent" />
-                    <div className="absolute inset-y-0 left-2 flex items-center">
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/70 backdrop-blur border border-white/15 text-white/85 shadow-[0_0_26px_rgba(0,0,0,0.8)]">
-                        <ChevronRight className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </div>
+                  <span
+                    className="inline-flex items-center justify-center w-10 h-10 bg-[#ffffff10]  cursor-pointer rounded-full group-hover:bg-white/10 "
+                    onClick={goNext}
+                  >
+                    <svg
+                      className="w-5 h-5 text-white rtl:rotate-180"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m9 5 7 7-7 7"
+                      />
+                    </svg>
+                    <span className="sr-only">Next</span>
+                  </span>
                 </button>
-
-                {/* Soft glow under carousel */}
-                <div className="pointer-events-none absolute -bottom-4 left-1/2 h-14 w-2/3 -translate-x-1/2 rounded-full bg-gradient-to-r from-orange-500/20 via-sky-400/15 to-violet-500/25 blur-3xl opacity-70" />
               </div>
             )}
           </div>

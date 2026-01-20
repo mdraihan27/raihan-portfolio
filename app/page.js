@@ -100,9 +100,9 @@ export default function Home() {
         <Beams />
 
         <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] bg-[#00000030] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
+          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] bg-[#00000020] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
             {/* Header stays at top */}
-            <div className="w-full h-[30px] border-b-zinc-700 border-b">
+            <div className="hidden lg:block w-full h-[30px] border-b-zinc-700 border-b">
               <div className="hidden lg:block h-full w-[250px] border-e border-e-zinc-700"></div>
             </div>
             {/* Content area: nav + main, main scrolls */}
@@ -198,40 +198,38 @@ export default function Home() {
                       title="Everything Image"
                       subtitle="The ultimate tool for quick image fixes. Easily convert, compress, crop, resize, edit, remove backgrounds, add watermark, add text over, blur and enhance image resolution. All in one place."
                       link="https://everything-image.tech/"
+                      link2="https://github.com/mdraihan27/everything-image"
                       tags={["Next.js", "Tailwind CSS"]}
                       images={[
                         {
-                          src: "/assets/images/projects/everything-image/ei-landing.png",
+                          src: "/assets/images/projects/everything-image/everything-image-1.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-add-text.png",
+                          src: "/assets/images/projects/everything-image/everything-image-2.png",
                           alt: "Add Text Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-convert.png",
+                          src: "/assets/images/projects/everything-image/everything-image-3.png",
                           alt: "Convert Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-pro-editor.png",
+                          src: "/assets/images/projects/everything-image/everything-image-4.png",
                           alt: "Pro Editor Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-watermark.png",
+                          src: "/assets/images/projects/everything-image/everything-image-5.png",
                           alt: "Add Watermark Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-crop.png",
+                          src: "/assets/images/projects/everything-image/everything-image-6.png",
                           alt: "Crop & Resize Page",
                         },
                         {
-                          src: "/assets/images/projects/everything-image/ei-about.png",
+                          src: "/assets/images/projects/everything-image/everything-image-7.png",
                           alt: "About Page",
                         },
-                        {
-                          src: "/assets/images/projects/everything-image/ei-contact.png",
-                          alt: "Contact Page",
-                        },
+                        
                       ]}
                     />
                     <Project
@@ -239,6 +237,7 @@ export default function Home() {
                       title="Ballotguard"
                       subtitle="The perfect online voting system. Enforces single person single vote principle by sending a private voting link to each voters email. Can perform open elections too which operates based on a public link."
                       link="https://ballotguard.vercel.app/"
+                      link2="https://github.com/orgs/ballotguard/repositories"
                       tags={[
                         "Next.js",
                         "Springboot",
@@ -248,55 +247,59 @@ export default function Home() {
                       ]}
                       images={[
                         {
-                          src: "/assets/images/projects/ballotguard/bg-landing.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-2.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-signup.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-3.png",
                           alt: "Signup Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-dashboard.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-4.png",
                           alt: "Dashboard Page",
                         },
 
                         {
-                          src: "/assets/images/projects/ballotguard/bg-election-name.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-5.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-election-layout.png",
-                          alt: "Landing Page",
-                        },
-
-                        {
-                          src: "/assets/images/projects/ballotguard/bg-election-schedule.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-6.png",
                           alt: "Landing Page",
                         },
 
                         {
-                          src: "/assets/images/projects/ballotguard/bg-election-options.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-7.png",
                           alt: "Landing Page",
                         },
 
                         {
-                          src: "/assets/images/projects/ballotguard/bg-election-draft.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-8.png",
+                          alt: "Landing Page",
+                        },
+
+                        {
+                          src: "/assets/images/projects/ballotguard/ballotguard-9.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-election-info.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-10.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-edit-election.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-11.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-profile.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-12.png",
                           alt: "Landing Page",
                         },
                         {
-                          src: "/assets/images/projects/ballotguard/bg-cast-vote.png",
+                          src: "/assets/images/projects/ballotguard/ballotguard-13.png",
+                          alt: "Landing Page",
+                        },
+                        {
+                          src: "/assets/images/projects/ballotguard/ballotguard-14.png",
                           alt: "Landing Page",
                         },
                       ]}
@@ -309,6 +312,7 @@ export default function Home() {
                 cinematic, distraction-free editor. Crafted to feel like a
                 design tool, but moves at the speed of code."
                       link="https://neuraletter.vercel.app/"
+                      link2="https://github.com/orgs/densware/repositories"
                       tags={[
                         "Next.js",
                         "Fast API",
@@ -319,16 +323,20 @@ export default function Home() {
                       ]}
                       images={[
                         {
-                          src: "/assets/images/projects/neuraletter/nl-1.png",
+                          src: "/assets/images/projects/neuraletter/neuraletter-1.png",
                           alt: "Neuraletter 1",
                         },
                         {
-                          src: "/assets/images/projects/neuraletter/nl-2.png",
+                          src: "/assets/images/projects/neuraletter/neuraletter-2.png",
                           alt: "Neuraletter 2",
                         },
                         {
-                          src: "/assets/images/projects/neuraletter/nl-3.png",
+                          src: "/assets/images/projects/neuraletter/neuraletter-3.png",
                           alt: "Neuraletter 3",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-3.png",
+                          alt: "Neuraletter 4",
                         },
                       ]}
                     />
@@ -337,7 +345,7 @@ export default function Home() {
 
                 <Achievements ref={achievementsRef} />
                 <Education ref={educationRef} />
-                <div ref={contactRef} className="mb-16 lg:mb-[817px]">
+                <div ref={contactRef} className="mb-16 ">
                   <p className="text-stone-100 font-medium mb-3">Contact</p>
 
                   <Contact />
