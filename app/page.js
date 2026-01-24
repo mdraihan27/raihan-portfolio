@@ -306,7 +306,7 @@ export default function Home() {
                     />
                     <Project
                       ref={project3Ref}
-                      title="Neuraletter"
+                      title="Neuraletter (ongoing)"
                       subtitle="An AI-native newsletter workspace
                 that lets you compose, iterate, and ship issues with a
                 cinematic, distraction-free editor. Crafted to feel like a
