@@ -28,6 +28,8 @@ export default function Home() {
   const projectsRef = useRef(null);
   const project1Ref = useRef(null);
   const project2Ref = useRef(null);
+  const project4Ref = useRef(null);
+
   const skillsRef = useRef(null);
 
   const project3Ref = useRef(null);
@@ -134,7 +136,22 @@ export default function Home() {
                     key: "projects",
                     icon: PanelsTopLeft,
                   },
-
+                  {
+                    itemName: "Neuraletter",
+                    targetRef: project3Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project1",
+                    // icon: Layers,
+                  },
+                  {
+                    itemName: "MailDoor",
+                    targetRef: project4Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project4",
+                    // icon: Layers,
+                  },
                   {
                     itemName: "Everything Image",
                     targetRef: project1Ref,
@@ -150,14 +167,6 @@ export default function Home() {
                     offSet: 15,
                     key: "project2",
                     // icon: Cpu,
-                  },
-                  {
-                    itemName: "Neuraletter",
-                    targetRef: project3Ref,
-                    type: "project",
-                    offSet: 15,
-                    key: "project1",
-                    // icon: Layers,
                   },
                   {
                     itemName: "Achievements",
@@ -194,6 +203,112 @@ export default function Home() {
 
                   <div className="flex flex-col gap-8">
                     <Project
+                      ref={project3Ref}
+                      title="Neuraletter"
+                      subtitle="An AI powered newsletter service
+                that lets you create topics, chat with AI to generate a description for that topic and sends regular updates to your email on whats happening worldwide around those topics based on a frequency you set."
+                      link="https://neuraletter.raihanhossen.site/"
+                      link2="https://github.com/mdraihan27/neuraletter-frontend"
+                      link2Label="Frontend Repo"
+                      link3="https://github.com/mdraihan27/neuraletter-backend"
+                      link3Label="Backend Repo"
+                      tags={[
+                        "Next.js",
+                        "Fast API",
+                        "Mistral AI",
+                        "PostgreSQL",
+                        "Digital Ocean",
+                        "Nginx",
+                      ]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-1.png",
+                          alt: "Neuraletter 1",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-2.png",
+                          alt: "Neuraletter 2",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-3.png",
+                          alt: "Neuraletter 3",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-4.png",
+                          alt: "Neuraletter 4",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-5.png",
+                          alt: "Neuraletter 5",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-6.png",
+                          alt: "Neuraletter 6",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-7.png",
+                          alt: "Neuraletter 7",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-8.png",
+                          alt: "Neuraletter 8",
+                        },
+                        {
+                          src: "/assets/images/projects/neuraletter/neuraletter-9.png",
+                          alt: "Neuraletter 9",
+                        },
+                      ]}
+                    />
+
+                    <Project
+                      ref={project4Ref}
+                      title="MailDoor"
+                      subtitle="A simple SMTP based mailing service, that lets you bypass digital oceans blockage of SMTP mail sending and lets you easily sent mails to your users by providing your app password."
+                      link="https://maildoor.raihanhossen.site/"
+                      link2="https://github.com/mdraihan27/maildoor"
+                      link2Label="GitHub Repo"
+
+                      tags={[
+                        "Next.js",
+                        "Express Js",
+                        "Nodemailer",
+                        "mongoDB",
+
+                      ]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-1.png",
+                          alt: "Maildoor 1",
+                        },
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-2.png",
+                          alt: "Maildoor 2",
+                        },
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-3.png",
+                          alt: "Maildoor 3",
+                        },
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-4.png",
+                          alt: "Maildoor 4",
+                        },
+                         {
+                          src: "/assets/images/projects/maildoor/maildoor-5.png",
+                          alt: "Maildoor 5",
+                        },
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-6.png",
+                          alt: "Maildoor 6",
+                        },
+                        {
+                          src: "/assets/images/projects/maildoor/maildoor-7.png",
+                          alt: "Maildoor 7",
+                        },
+                        
+                      ]}
+                    />
+
+                    <Project
                       ref={project1Ref}
                       title="Everything Image"
                       subtitle="The ultimate tool for quick image fixes. Easily convert, compress, crop, resize, edit, remove backgrounds, add watermark, add text over, blur and enhance image resolution. All in one place."
@@ -229,7 +344,7 @@ export default function Home() {
                           src: "/assets/images/projects/everything-image/everything-image-7.png",
                           alt: "About Page",
                         },
-                        
+
                       ]}
                     />
                     <Project
@@ -304,42 +419,7 @@ export default function Home() {
                         },
                       ]}
                     />
-                    <Project
-                      ref={project3Ref}
-                      title="Neuraletter (ongoing)"
-                      subtitle="An AI-native newsletter workspace
-                that lets you compose, iterate, and ship issues with a
-                cinematic, distraction-free editor. Crafted to feel like a
-                design tool, but moves at the speed of code."
-                      link="https://neuraletter.vercel.app/"
-                      link2="https://github.com/orgs/densware/repositories"
-                      tags={[
-                        "Next.js",
-                        "Fast API",
-                        "Mistral AI",
-                        "PostgreSQL",
-                        "Digital Ocean",
-                        "Nginx",
-                      ]}
-                      images={[
-                        {
-                          src: "/assets/images/projects/neuraletter/neuraletter-1.png",
-                          alt: "Neuraletter 1",
-                        },
-                        {
-                          src: "/assets/images/projects/neuraletter/neuraletter-2.png",
-                          alt: "Neuraletter 2",
-                        },
-                        {
-                          src: "/assets/images/projects/neuraletter/neuraletter-3.png",
-                          alt: "Neuraletter 3",
-                        },
-                        {
-                          src: "/assets/images/projects/neuraletter/neuraletter-4.png",
-                          alt: "Neuraletter 4",
-                        },
-                      ]}
-                    />
+
                   </div>
                 </div>
 

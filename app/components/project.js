@@ -20,7 +20,7 @@ const fallbackImages = [
 ];
 
 const Project = forwardRef(function Project(
-  { title, subtitle, link,link2, link2Label = "GitHub", linkLabel = "View project", images = [], tags = [] },
+  { title, subtitle, link, link2, link2Label = "GitHub", linkLabel = "View project", link3, link3Label, images = [], tags = [] },
   ref,
 ) {
   const slides = images.length ? images : fallbackImages;
@@ -39,7 +39,7 @@ const Project = forwardRef(function Project(
   return (
     <section ref={ref} className="scroll-mt-24">
       <div className="bg-[#00000095] border border-white/5 rounded-3xl p-5 sm:p-6 md:p-8 w-full text-stone-100 shadow-[0_24px_80px_rgba(0,0,0,0.85)]">
-        <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
+        <div className="flex flex-col md:flex-row md:items-start gap-6 ">
           <div className="space-y-4 md:w-[34%]">
             {/* {title && (
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.16em] text-orange-300/80">
@@ -75,7 +75,9 @@ const Project = forwardRef(function Project(
               </a>
             )}
 
-            {link2 && (
+
+
+            {link2 && !link3 && (
               <a
                 href={link2}
                 target="_blank"
@@ -88,6 +90,35 @@ const Project = forwardRef(function Project(
                   <span className="pointer-events-none absolute inset-0 rounded-full bg-stone-500/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
                 </span>
               </a>
+            )}
+
+            {link2 && link3 && (
+              <div className="flex gap-3">
+                <a
+                  href={link2}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-stone-300 hover:text-stone-200 mt-1 group"
+                >
+                  <span className="relative inline-flex items-center gap-2 rounded-md border border-stone-300  px-3 py-1.5 backdrop-blur-sm">
+                    <span>{link2Label}</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    <span className="pointer-events-none absolute inset-0 rounded-full bg-stone-500/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                  </span>
+                </a>
+                <a
+                  href={link3}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-stone-300 hover:text-stone-200 mt-1 group"
+                >
+                  <span className="relative inline-flex items-center gap-2 rounded-md border border-stone-300  px-3 py-1.5 backdrop-blur-sm">
+                    <span>{link3Label}</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    <span className="pointer-events-none absolute inset-0 rounded-full bg-stone-500/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                  </span>
+                </a>
+              </div>
             )}
 
             {tags && tags.length > 0 && (
@@ -112,13 +143,12 @@ const Project = forwardRef(function Project(
                 data-carousel="static"
               >
                 {/* Carousel wrapper with fixed height */}
-            <div className="relative h-48 md:h-72 lg:h-96 border-2 border-white/10 overflow-hidden rounded-2xl flex items-center justify-center bg-black/40">
+                <div className="relative h-48 md:h-72 lg:h-96 border-2 border-white/10 overflow-hidden rounded-2xl flex items-center justify-center bg-black/40">
                   {slides.map((slide, index) => (
                     <div
                       key={index}
-                      className={`${
-                        index === currentIndex ? "block" : "hidden"
-                      } duration-700 ease-in-out w-full h-full`}
+                      className={`${index === currentIndex ? "block" : "hidden"
+                        } duration-700 ease-in-out w-full h-full`}
                       data-carousel-item={
                         index === currentIndex ? "active" : undefined
                       }
@@ -128,10 +158,10 @@ const Project = forwardRef(function Project(
                           src={slide.src}
                           alt={slide.alt || "Project image"}
                           fill
-                        className="object-contain"
-                        loading="eager"
-                        quality={300}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 650px, 750px"
+                          className="object-cover"
+                          loading="eager"
+                          quality={300}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 650px, 750px"
                         />
                       </div>
                     </div>
@@ -144,11 +174,10 @@ const Project = forwardRef(function Project(
                     <button
                       key={index}
                       type="button"
-                      className={`w-2 h-2 rounded-full border border-white/60 transition-colors ${
-                        index === currentIndex
+                      className={`w-2 h-2 rounded-full border border-white/60 transition-colors ${index === currentIndex
                           ? "bg-white"
                           : "bg-white/20 hover:bg-white/40"
-                      }`}
+                        }`}
                       aria-current={index === currentIndex ? "true" : "false"}
                       aria-label={`Slide ${index + 1}`}
                       onClick={() => setCurrentIndex(index)}
@@ -190,7 +219,7 @@ const Project = forwardRef(function Project(
                 <button
                   type="button"
                   className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  
+
                   data-carousel-next
                 >
                   <span
