@@ -29,6 +29,8 @@ export default function Home() {
   const project1Ref = useRef(null);
   const project2Ref = useRef(null);
   const project4Ref = useRef(null);
+  const project5Ref = useRef(null);
+
 
   const skillsRef = useRef(null);
 
@@ -50,6 +52,8 @@ export default function Home() {
       { key: "me", ref: meRef, offset: 20 },
       { key: "skills", ref: skillsRef, offset: 15 },
       { key: "projects", ref: projectsRef, offset: 15 },
+      { key: "project5", ref: project5Ref, offset: 15 },
+      { key: "project4", ref: project4Ref, offset: 15 },
       { key: "project3", ref: project1Ref, offset: 15 },
       { key: "project2", ref: project2Ref, offset: 15 },
       { key: "project1", ref: project3Ref, offset: 15 },
@@ -137,6 +141,14 @@ export default function Home() {
                     icon: PanelsTopLeft,
                   },
                   {
+                    itemName: "Barakah",
+                    targetRef: project5Ref,
+                    type: "project",
+                    offSet: 15,
+                    key: "project5",
+                    // icon: Layers,
+                  },
+                  {
                     itemName: "Neuraletter",
                     targetRef: project3Ref,
                     type: "project",
@@ -202,6 +214,126 @@ export default function Home() {
                   <p className="text-stone-100 font-medium mb-3">Projects</p>
 
                   <div className="flex flex-col gap-8">
+
+                    <Project
+                      ref={project5Ref}
+                      title="Barakah - Compare Groceries, Shop Smarter"
+                      subtitle="A platform where consumers can compare grocery prices of offline shops in their area. It encourages fair pricing and helps users find the best deals, saving them money and promoting transparency in the grocery market."
+                      link="https://barakah-platform.vercel.app/"
+                      link2="https://github.com/mdraihan27/barakah"
+                      link2Label="GitHub Repo"
+
+                      tags={[
+                        "React",
+                        "FastAPI",
+                        "mongoDB",
+                        "Cloudinary",
+                        "Tailwind CSS",
+
+                      ]}
+                      images={[
+                        {
+                          src: "/assets/images/projects/barakah/barakah-1.png",
+                          alt: "Barakah 1",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-2.png",
+                          alt: "Barakah 2",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-3.png",
+                          alt: "Barakah 3",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-4.png",
+                          alt: "Barakah 4",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-5.png",
+                          alt: "Barakah 5",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-6.png",
+                          alt: "Barakah 6",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-7.png",
+                          alt: "Barakah 7",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-8.png",
+                          alt: "Barakah 8",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-9.png",
+                          alt: "Barakah 9",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-10.png",
+                          alt: "Barakah 10",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-11.png",
+                          alt: "Barakah 11",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-12.png",
+                          alt: "Barakah 12",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-13.png",
+                          alt: "Barakah 13",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-14.png",
+                          alt: "Barakah 14",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-15.png",
+                          alt: "Barakah 15",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-16.png",
+                          alt: "Barakah 16",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-17.png",
+                          alt: "Barakah 17",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-18.png",
+                          alt: "Barakah 18",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-19.png",
+                          alt: "Barakah 19",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-20.png",
+                          alt: "Barakah 20",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-21.png",
+                          alt: "Barakah 21",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-22.png",
+                          alt: "Barakah 22",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-23.png",
+                          alt: "Barakah 23",
+                        },
+                        {
+                          src: "/assets/images/projects/barakah/barakah-24.png",
+                          alt: "Barakah 24",
+                        },
+
+
+                      ]}
+                    />
+
+
                     <Project
                       ref={project3Ref}
                       title="Neuraletter"
@@ -292,7 +424,7 @@ export default function Home() {
                           src: "/assets/images/projects/maildoor/maildoor-4.png",
                           alt: "Maildoor 4",
                         },
-                         {
+                        {
                           src: "/assets/images/projects/maildoor/maildoor-5.png",
                           alt: "Maildoor 5",
                         },
@@ -304,7 +436,7 @@ export default function Home() {
                           src: "/assets/images/projects/maildoor/maildoor-7.png",
                           alt: "Maildoor 7",
                         },
-                        
+
                       ]}
                     />
 
