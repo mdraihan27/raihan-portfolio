@@ -148,14 +148,14 @@ export default function Home() {
                     key: "project5",
                     // icon: Layers,
                   },
-                  {
-                    itemName: "Neuraletter",
-                    targetRef: project3Ref,
-                    type: "project",
-                    offSet: 15,
-                    key: "project1",
-                    // icon: Layers,
-                  },
+                  // {
+                  //   itemName: "Neuraletter",
+                  //   targetRef: project3Ref,
+                  //   type: "project",
+                  //   offSet: 15,
+                  //   key: "project1",
+                  //   // icon: Layers,
+                  // },
                   {
                     itemName: "MailDoor",
                     targetRef: project4Ref,
@@ -334,7 +334,7 @@ export default function Home() {
                     />
 
 
-                    <Project
+                    {/* <Project
                       ref={project3Ref}
                       title="Neuraletter"
                       subtitle="An AI powered newsletter service
@@ -390,13 +390,13 @@ export default function Home() {
                           alt: "Neuraletter 9",
                         },
                       ]}
-                    />
+                    />  */}
 
                     <Project
                       ref={project4Ref}
                       title="MailDoor"
                       subtitle="A simple SMTP based mailing service, that lets you bypass digital oceans blockage of SMTP mail sending and lets you easily sent mails to your users by providing your app password."
-                      link="https://maildoor.raihanhossen.site/"
+                      link="https://maildoor.raihanhossen.work/"
                       link2="https://github.com/mdraihan27/maildoor"
                       link2Label="GitHub Repo"
 
