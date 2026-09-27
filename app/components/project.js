@@ -160,7 +160,7 @@ const Project = forwardRef(function Project(
                           fill
                           className="object-cover"
                           loading="eager"
-                          quality={300}
+                          quality={95}
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 650px, 750px"
                         />
                       </div>
