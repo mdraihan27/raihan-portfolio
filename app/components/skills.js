@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Skills = forwardRef(function Skills(props, ref) {
   return (
-    <div ref={ref} className="">
+    <div ref={ref} id="skills" className="scroll-mt-20">
       <p className="text-stone-100 font-medium mb-3">My Skills</p>
       <div className="bg-[#00000095] rounded-4xl border border-white/5 p-5 sm:p-6 w-full text-stone-300">
         <div className="w-full">

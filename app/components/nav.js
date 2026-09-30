@@ -1,8 +1,8 @@
 export function Nav({ navItems, className, activeKey, onChangeActive, scrollContainerRef }) {
   return (
     <div
-      className={`flex overflow-x-auto no-scrollbar gap-3 px-4 py-3 border-b border-b-zinc-700 text-sm items-center font-medium bg-transparent
-        lg:overflow-visible lg:flex-col lg:w-[250px] lg:text-lg lg:gap-5 lg:text-left lg:items-start lg:pt-8 lg:ps-8 lg:border-b-0 lg:border-e lg:border-e-zinc-700 ${
+      className={`flex overflow-x-auto no-scrollbar gap-2 sm:gap-3 px-3 py-2.5 text-sm items-center font-medium bg-transparent
+        lg:overflow-visible lg:flex-col lg:w-[220px] lg:text-base lg:gap-4 lg:text-left lg:items-start lg:pt-4 lg:ps-2 ${
           className ?? ""
         }`}
     >
@@ -35,15 +35,15 @@ export function NavItem({
 }) {
   return (
     <button
-      className={`flex items-center gap-2 cursor-pointer whitespace-nowrap rounded-full px-3 py-1.5 border border-transparent text-xs sm:text-sm transition-transform duration-150 active:scale-95 active:translate-y-[1px]
+      className={`flex items-center gap-2 cursor-pointer whitespace-nowrap rounded-full px-3 py-1.5 text-xs sm:text-sm transition-all duration-150 active:scale-95 active:translate-y-[1px]
         ${
           isActive
-            ? "bg-amber-900/40 text-amber-300 border-amber-700/60"
-            : "text-stone-200 bg-white/5 hover:bg-white/10 hover:text-stone-50"
+            ? "bg-coral/10 text-coral font-semibold border border-coral/30"
+            : "text-stone-600 bg-stone-100/70 hover:bg-stone-200/70 hover:text-stone-900 border border-stone-200/50"
         }
-        ${type == "project" ? "lg:ms-8" : ""}
+        ${type == "project" ? "lg:ms-6" : ""}
         lg:rounded-none lg:px-0 lg:py-0 lg:bg-transparent lg:border-none lg:text-base lg:hover:bg-transparent
-        ${isActive ? " lg:text-amber-700" : " lg:text-stone-300 lg:hover:text-stone-500"}`}
+        ${isActive ? " lg:text-coral lg:font-semibold" : " lg:text-stone-500 lg:hover:text-stone-900"}`}
       onClick={() => {
         if (!targetRef.current) return;
         const container = scrollContainerRef?.current ?? window;

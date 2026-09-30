@@ -37,7 +37,7 @@ const Achievements = forwardRef(function Achievements(props, ref) {
   }, []);
 
   return (
-    <div ref={ref} className="">
+    <div ref={ref} id="achievements" className="scroll-mt-20">
       <p className="text-stone-100 font-medium mb-3">Achievements</p>
 
       <div className="bg-[#11111100] rounded-4xl  w-full text-stone-300">

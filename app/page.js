@@ -9,7 +9,9 @@ import Achievements from "./components/achievements";
 import Education from "./components/education";
 import Project from "./components/project";
 import Me from "./components/me";
-import Beams from "@/components/Beams";
+import DualGradientBackground from "@/components/DualGradientBackground";
+import HeroCoins3D from "@/components/HeroCoins3D";
+
 
 import {
   User2,
@@ -46,7 +48,7 @@ export default function Home() {
   const [activeNavKey, setActiveNavKey] = useState("me");
 
   useEffect(() => {
-    const container = mainRef.current || window;
+    const container = window;
 
     const sections = [
       { key: "me", ref: meRef, offset: 20 },
@@ -100,24 +102,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-zinc-900 dark:bg-black">
-      <div className="w-full h-screen relative">
+    <DualGradientBackground>
+      {/* 3D Coins orbiting across top-right corner of the whole screen (no sub-container) */}
+      <HeroCoins3D />
 
-        <Beams />
-
-        <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-          <div className="w-full max-w-[1440px] lg:h-7/8 md:h-7/8 h-full backdrop-blur-[35px] bg-[#00000020] border-[#ff4500] lg:rounded-2xl md:rounded-2xl flex flex-col">
-            {/* Header stays at top */}
-            <div className="hidden lg:block w-full h-[30px] border-b-zinc-700 border-b">
-              <div className="hidden lg:block h-full w-[250px] border-e border-e-zinc-700"></div>
-            </div>
-            {/* Content area: nav + main, main scrolls */}
-            <div className="flex flex-1 min-h-0 flex-col lg:flex-row">
-              <Nav
-                className=""
-                activeKey={activeNavKey}
-                onChangeActive={setActiveNavKey}
-                scrollContainerRef={mainRef}
+      <div className="w-full min-h-screen relative px-4 sm:px-6 lg:px-10 py-6 lg:py-12">
+        {/* Detached Sidebar on far left */}
+        <aside className="lg:fixed lg:left-6 xl:left-12 2xl:left-16 lg:top-12 z-30 mb-6 lg:mb-0">
+          <div className="sticky top-4 z-30 lg:static mx-auto w-fit lg:w-auto p-1.5 sm:p-2 lg:p-0 rounded-full lg:rounded-none bg-white/80 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none border border-stone-200/70 lg:border-none shadow-xs lg:shadow-none">
+            <Nav
+              className=""
+              activeKey={activeNavKey}
+              onChangeActive={setActiveNavKey}
+              scrollContainerRef={null}
                 navItems={[
                   {
                     itemName: "Me",
@@ -203,14 +200,18 @@ export default function Home() {
                   },
                 ]}
               />
+          </div>
+        </aside>
 
-              <main
-                ref={mainRef}
-                className="flex flex-col gap-8 p-6 sm:p-8 lg:p-10 w-full lg:w-[1180px]  flex-1 overflow-y-scroll no-scrollbar custom-scrollbar"
-              >
-                <Me ref={meRef} />
+        <main
+          ref={mainRef}
+          className="flex flex-col gap-10 w-full max-w-4xl mx-auto lg:ml-[260px] xl:ml-[320px] 2xl:mx-auto"
+        >
+
+
+          <Me ref={meRef} />
                 <Skills ref={skillsRef} />
-                <div ref={projectsRef}>
+                <div ref={projectsRef} id="projects" className="scroll-mt-20">
                   <p className="text-stone-100 font-medium mb-3">Projects</p>
 
                   <div className="flex flex-col gap-8">
@@ -557,16 +558,13 @@ export default function Home() {
 
                 <Achievements ref={achievementsRef} />
                 <Education ref={educationRef} />
-                <div ref={contactRef} className="mb-16 lg:mb-[605px]">
+                <div ref={contactRef} id="contact" className="scroll-mt-20 mb-16 lg:mb-[605px]">
                   <p className="text-stone-100 font-medium mb-3">Contact</p>
 
                   <Contact />
                 </div>
               </main>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
+    </DualGradientBackground>
   );
 }
