@@ -73,6 +73,14 @@ export function NavItem({
           });
         }
 
+        if (typeof window !== "undefined") {
+          if (itemName === "Skills") {
+            window.dispatchEvent(new CustomEvent("open-skills-view"));
+          } else if (itemName === "Achievements") {
+            window.dispatchEvent(new CustomEvent("open-achievements-view"));
+          }
+        }
+
         if (onActivate) {
           onActivate();
         }

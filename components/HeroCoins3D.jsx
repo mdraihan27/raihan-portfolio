@@ -4,17 +4,171 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 const COIN_TYPES = [
-  { id: "skills", name: "Skills", type: "skills" },
-  { id: "projects", name: "Projects", type: "projects" },
-  { id: "education", name: "Education", type: "education" },
-  { id: "achievements", name: "Achievements", type: "achievements" },
-  { id: "contact", name: "Contact", type: "contact" },
-  // Duplicate set to maintain continuous presence along the visible arc
+  { id: "skills", targetId: "skills", name: "Skills", type: "skills" },
+  { id: "projects", targetId: "projects", name: "Projects", type: "projects" },
+  { id: "education", targetId: "education", name: "Education", type: "education" },
+  { id: "achievements", targetId: "achievements", name: "Achievements", type: "achievements" },
+  { id: "contact", targetId: "contact", name: "Contact", type: "contact" },
+  // Repeated set: when unique items finish, put them again (180deg opposite)
   { id: "skills-2", targetId: "skills", name: "Skills", type: "skills" },
   { id: "projects-2", targetId: "projects", name: "Projects", type: "projects" },
   { id: "education-2", targetId: "education", name: "Education", type: "education" },
   { id: "achievements-2", targetId: "achievements", name: "Achievements", type: "achievements" },
   { id: "contact-2", targetId: "contact", name: "Contact", type: "contact" },
+];
+
+// 21 Skills arranged across 3 concentric circular orbital rows.
+// Each unique skill appears exactly once (7 skills per row, totalInRow: 7).
+// Middle track (Row 1) is staggered by +0.5 pitch so it sits in the middle between Row 0 and Row 2.
+const SKILL_ITEMS = [
+  // ROW 0: Outer Track (7 unique frontend skills)
+  { id: "html", name: "HTML", icon: "/assets/icons/skills/html.png", row: 0, indexInRow: 0, totalInRow: 7 },
+  { id: "css", name: "CSS", icon: "/assets/icons/skills/css.png", row: 0, indexInRow: 1, totalInRow: 7 },
+  { id: "tailwind", name: "Tailwind", icon: "/assets/icons/skills/tailwind.png", row: 0, indexInRow: 2, totalInRow: 7 },
+  { id: "js", name: "JavaScript", icon: "/assets/icons/skills/js.png", row: 0, indexInRow: 3, totalInRow: 7 },
+  { id: "ts", name: "TypeScript", icon: "/assets/icons/skills/ts.png", row: 0, indexInRow: 4, totalInRow: 7 },
+  { id: "react", name: "React", icon: "/assets/icons/skills/react.png", row: 0, indexInRow: 5, totalInRow: 7 },
+  { id: "nextjs", name: "Next.js", icon: "/assets/icons/skills/nextjs.png", row: 0, indexInRow: 6, totalInRow: 7 },
+
+  // ROW 1: Middle Track (7 unique backend skills, +0.5 pitch offset)
+  { id: "python", name: "Python", icon: "/assets/icons/skills/python.png", row: 1, indexInRow: 0, totalInRow: 7 },
+  { id: "java", name: "Java", icon: "/assets/icons/skills/java.png", row: 1, indexInRow: 1, totalInRow: 7 },
+  { id: "fastapi", name: "FastAPI", icon: "/assets/icons/skills/fastapi.png", row: 1, indexInRow: 2, totalInRow: 7 },
+  { id: "sqlalchemy", name: "SQLAlchemy", icon: "/assets/icons/skills/sqlalchemy.png", row: 1, indexInRow: 3, totalInRow: 7 },
+  { id: "spring", name: "Spring", icon: "/assets/icons/skills/spring.png", row: 1, indexInRow: 4, totalInRow: 7 },
+  { id: "springboot", name: "Spring Boot", icon: "/assets/icons/skills/springboot.png", row: 1, indexInRow: 5, totalInRow: 7 },
+  { id: "postgresql", name: "PostgreSQL", icon: "/assets/icons/skills/postgresql.png", row: 1, indexInRow: 6, totalInRow: 7 },
+
+  // ROW 2: Inner Track (7 unique database, cloud & tool skills)
+  { id: "mongodb", name: "MongoDB", icon: "/assets/icons/skills/mongodb.png", row: 2, indexInRow: 0, totalInRow: 7 },
+  { id: "mysql", name: "MySQL", icon: "/assets/icons/skills/mysql.png", row: 2, indexInRow: 1, totalInRow: 7 },
+  { id: "firebase", name: "Firebase", icon: "/assets/icons/skills/firebase.png", row: 2, indexInRow: 2, totalInRow: 7 },
+  { id: "docker", name: "Docker", icon: "/assets/icons/skills/docker.png", row: 2, indexInRow: 3, totalInRow: 7 },
+  { id: "linux", name: "Linux", icon: "/assets/icons/skills/linux.png", row: 2, indexInRow: 4, totalInRow: 7 },
+  { id: "git", name: "Git", icon: "/assets/icons/skills/git.png", row: 2, indexInRow: 5, totalInRow: 7 },
+  { id: "github", name: "GitHub", icon: "/assets/icons/skills/github.png", row: 2, indexInRow: 6, totalInRow: 7 },
+];
+
+// Achievements arranged in a single circular orbital track around the center cross.
+// Unique items are placed once in sequence, and when they finish, repeated again (6 x 2 = 12 coins).
+const ACHIEVEMENT_ITEMS = [
+  // First sequence: 6 unique achievements
+  {
+    id: "acm-contest",
+    name: "1st Runner-Up (JUST ACM)",
+    caption: "1st Runner-Up (JUST ACM)",
+    icon: "/assets/icons/achievements/just_logo.png",
+    row: 0,
+    indexInRow: 0,
+    totalInRow: 12,
+  },
+  {
+    id: "robotics-quiz",
+    name: "Champion: Robotics Quiz",
+    caption: "Robotics Quiz Champion",
+    icon: "/assets/icons/achievements/just_robo_society.png",
+    row: 0,
+    indexInRow: 1,
+    totalInRow: 12,
+  },
+  {
+    id: "codeforces-max",
+    name: "Codeforces (1168 Max)",
+    caption: "Codeforces (1168 Max)",
+    icon: "/assets/icons/achievements/codeforces.png",
+    url: "https://codeforces.com/profile/mdraihanhossen",
+    row: 0,
+    indexInRow: 2,
+    totalInRow: 12,
+  },
+  {
+    id: "cf-solved",
+    name: "365+ Solved Problems",
+    caption: "365+ Solved (Codeforces)",
+    icon: "/assets/icons/achievements/codeforces.png",
+    url: "https://codeforces.com/profile/mdraihanhossen",
+    row: 0,
+    indexInRow: 3,
+    totalInRow: 12,
+  },
+  {
+    id: "robo-soc",
+    name: "JUST Robo Society",
+    caption: "JUST Robo Society",
+    icon: "/assets/icons/achievements/just_robo_society.png",
+    row: 0,
+    indexInRow: 4,
+    totalInRow: 12,
+  },
+  {
+    id: "codechef-pro",
+    name: "CodeChef Competitor",
+    caption: "CodeChef Profile",
+    icon: "/assets/icons/achievements/codechef.png",
+    url: "https://www.codechef.com",
+    row: 0,
+    indexInRow: 5,
+    totalInRow: 12,
+  },
+
+  // Repeated sequence: when unique items finish, put them again (180deg opposite)
+  {
+    id: "acm-contest-dup",
+    name: "1st Runner-Up (JUST ACM)",
+    caption: "1st Runner-Up (JUST ACM)",
+    icon: "/assets/icons/achievements/just_logo.png",
+    row: 0,
+    indexInRow: 6,
+    totalInRow: 12,
+  },
+  {
+    id: "robotics-quiz-dup",
+    name: "Champion: Robotics Quiz",
+    caption: "Robotics Quiz Champion",
+    icon: "/assets/icons/achievements/just_robo_society.png",
+    row: 0,
+    indexInRow: 7,
+    totalInRow: 12,
+  },
+  {
+    id: "codeforces-max-dup",
+    name: "Codeforces (1168 Max)",
+    caption: "Codeforces (1168 Max)",
+    icon: "/assets/icons/achievements/codeforces.png",
+    url: "https://codeforces.com/profile/mdraihanhossen",
+    row: 0,
+    indexInRow: 8,
+    totalInRow: 12,
+  },
+  {
+    id: "cf-solved-dup",
+    name: "365+ Solved Problems",
+    caption: "365+ Solved (Codeforces)",
+    icon: "/assets/icons/achievements/codeforces.png",
+    url: "https://codeforces.com/profile/mdraihanhossen",
+    row: 0,
+    indexInRow: 9,
+    totalInRow: 12,
+  },
+  {
+    id: "robo-soc-dup",
+    name: "JUST Robo Society",
+    caption: "JUST Robo Society",
+    icon: "/assets/icons/achievements/just_robo_society.png",
+    row: 0,
+    indexInRow: 10,
+    totalInRow: 12,
+  },
+  {
+    id: "codechef-pro-dup",
+    name: "CodeChef Competitor",
+    caption: "CodeChef Profile",
+    icon: "/assets/icons/achievements/codechef.png",
+    url: "https://www.codechef.com",
+    row: 0,
+    indexInRow: 11,
+    totalInRow: 12,
+  },
 ];
 
 function drawIcon(ctx, type) {
@@ -26,7 +180,6 @@ function drawIcon(ctx, type) {
   ctx.lineJoin = "round";
 
   if (type === "skills") {
-    // Minimalist Code Chevron Brackets < / >
     ctx.beginPath();
     ctx.moveTo(-55, -80);
     ctx.lineTo(-135, 0);
@@ -44,32 +197,26 @@ function drawIcon(ctx, type) {
     ctx.lineTo(-22, 105);
     ctx.stroke();
   } else if (type === "projects") {
-    // Clean Minimalist Bento Layout (4 rounded tiles)
     const size = 95;
     const r = 18;
     const gap = 12;
 
-    // Top-left
     ctx.beginPath();
     ctx.roundRect(-gap / 2 - size, -gap / 2 - size, size, size, r);
     ctx.stroke();
 
-    // Top-right
     ctx.beginPath();
     ctx.roundRect(gap / 2, -gap / 2 - size, size, size, r);
     ctx.stroke();
 
-    // Bottom-left
     ctx.beginPath();
     ctx.roundRect(-gap / 2 - size, gap / 2, size, size, r);
     ctx.stroke();
 
-    // Bottom-right
     ctx.beginPath();
     ctx.roundRect(gap / 2, gap / 2, size, size, r);
     ctx.stroke();
   } else if (type === "education") {
-    // Sleek Minimalist Graduation Mortarboard
     ctx.beginPath();
     ctx.moveTo(0, -90);
     ctx.lineTo(145, -30);
@@ -78,13 +225,11 @@ function drawIcon(ctx, type) {
     ctx.closePath();
     ctx.stroke();
 
-    // Skullcap curve
     ctx.beginPath();
     ctx.moveTo(-85, -2);
     ctx.quadraticCurveTo(0, 85, 85, -2);
     ctx.stroke();
 
-    // Tassel drop
     ctx.beginPath();
     ctx.moveTo(145, -30);
     ctx.lineTo(150, 48);
@@ -94,7 +239,6 @@ function drawIcon(ctx, type) {
     ctx.arc(150, 60, 11, 0, Math.PI * 2);
     ctx.fill();
   } else if (type === "achievements") {
-    // Minimalist Modern Trophy Cup
     ctx.beginPath();
     ctx.moveTo(-80, -85);
     ctx.lineTo(80, -85);
@@ -102,7 +246,6 @@ function drawIcon(ctx, type) {
     ctx.quadraticCurveTo(-75, 20, -80, -85);
     ctx.stroke();
 
-    // Clean side handles
     ctx.beginPath();
     ctx.moveTo(-75, -68);
     ctx.bezierCurveTo(-130, -58, -120, -5, -60, -5);
@@ -113,7 +256,6 @@ function drawIcon(ctx, type) {
     ctx.bezierCurveTo(130, -58, 120, -5, 60, -5);
     ctx.stroke();
 
-    // Minimal Stem & Pedestal
     ctx.beginPath();
     ctx.moveTo(0, 42);
     ctx.lineTo(0, 82);
@@ -124,7 +266,6 @@ function drawIcon(ctx, type) {
     ctx.lineTo(52, 82);
     ctx.stroke();
   } else if (type === "contact") {
-    // Minimalist Modern Mail Envelope
     ctx.beginPath();
     ctx.roundRect(-135, -92, 270, 184, 24);
     ctx.stroke();
@@ -145,7 +286,6 @@ function createCoinTexture({ type }) {
   canvas.height = 1024;
   const ctx = canvas.getContext("2d");
 
-  // Velvety smooth coral radial gradient with soft luminous center
   const grad = ctx.createRadialGradient(512, 512, 40, 512, 512, 512);
   grad.addColorStop(0, "#ff7b72");
   grad.addColorStop(0.5, "#FA5F55");
@@ -156,23 +296,18 @@ function createCoinTexture({ type }) {
   ctx.arc(512, 512, 512, 0, Math.PI * 2);
   ctx.fill();
 
-  // Single minimalist outer frosted hairline ring
   ctx.strokeStyle = "rgba(255, 255, 255, 0.32)";
   ctx.lineWidth = 5;
   ctx.beginPath();
   ctx.arc(512, 512, 482, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Subtle interior guide hairline
   ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
   ctx.lineWidth = 2.5;
   ctx.beginPath();
   ctx.arc(512, 512, 454, 0, Math.PI * 2);
   ctx.stroke();
 
-  // 4 Minimalist compass accent notches (12, 3, 6, 9 o'clock)
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-  ctx.lineWidth = 3.5;
   const notchR = 454;
   const notchLen = 12;
   [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].forEach((a) => {
@@ -182,11 +317,231 @@ function createCoinTexture({ type }) {
     ctx.stroke();
   });
 
-  // Centered Vector Icon (reversed vertically 180deg so icons render right-side up)
   ctx.save();
   ctx.translate(512, 512);
   ctx.scale(1, -1);
   drawIcon(ctx, type);
+  ctx.restore();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  return texture;
+}
+
+// Secondary skill coin texture with exact same styling, finish and resolution as main coins
+function createSkillCoinTexture(skill) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext("2d");
+
+  const grad = ctx.createRadialGradient(512, 512, 40, 512, 512, 512);
+  grad.addColorStop(0, "#ff7b72");
+  grad.addColorStop(0.5, "#FA5F55");
+  grad.addColorStop(0.85, "#eb463a");
+  grad.addColorStop(1, "#d63b30");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(512, 512, 512, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.32)";
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(512, 512, 482, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(512, 512, 454, 0, Math.PI * 2);
+  ctx.stroke();
+
+  const notchR = 454;
+  const notchLen = 12;
+  [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].forEach((a) => {
+    ctx.beginPath();
+    ctx.moveTo(512 + (notchR - notchLen) * Math.cos(a), 512 + (notchR - notchLen) * Math.sin(a));
+    ctx.lineTo(512 + (notchR + notchLen) * Math.cos(a), 512 + (notchR + notchLen) * Math.sin(a));
+    ctx.stroke();
+  });
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+  if (typeof window !== "undefined") {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.src = skill.icon;
+    img.onload = () => {
+      ctx.save();
+      ctx.translate(512, 512);
+      ctx.scale(1, -1);
+
+      // Frosted badge backing
+      ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+      ctx.beginPath();
+      ctx.arc(0, 0, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Large crisp icon
+      const iconSize = 340;
+      ctx.drawImage(img, -iconSize / 2, -iconSize / 2, iconSize, iconSize);
+      ctx.restore();
+
+      texture.needsUpdate = true;
+    };
+  }
+
+  return texture;
+}
+
+// Secondary achievement coin texture with exact same styling, finish and resolution as skill coins
+function createAchievementCoinTexture(achievement) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext("2d");
+
+  const grad = ctx.createRadialGradient(512, 512, 40, 512, 512, 512);
+  grad.addColorStop(0, "#ff7b72");
+  grad.addColorStop(0.5, "#FA5F55");
+  grad.addColorStop(0.85, "#eb463a");
+  grad.addColorStop(1, "#d63b30");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(512, 512, 512, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.32)";
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(512, 512, 482, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(512, 512, 454, 0, Math.PI * 2);
+  ctx.stroke();
+
+  const notchR = 454;
+  const notchLen = 12;
+  [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].forEach((a) => {
+    ctx.beginPath();
+    ctx.moveTo(512 + (notchR - notchLen) * Math.cos(a), 512 + (notchR - notchLen) * Math.sin(a));
+    ctx.lineTo(512 + (notchR + notchLen) * Math.cos(a), 512 + (notchR + notchLen) * Math.sin(a));
+    ctx.stroke();
+  });
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+  if (typeof window !== "undefined" && achievement.icon) {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.src = achievement.icon;
+    img.onload = () => {
+      ctx.save();
+      ctx.translate(512, 512);
+      ctx.scale(1, -1);
+
+      // Frosted badge backing
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+      ctx.beginPath();
+      ctx.arc(0, 0, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Large crisp icon
+      const iconSize = 340;
+      ctx.drawImage(img, -iconSize / 2, -iconSize / 2, iconSize, iconSize);
+      ctx.restore();
+
+      texture.needsUpdate = true;
+    };
+  }
+
+  return texture;
+}
+
+// 3D Front texture for the big orange cross at center of wheel
+function createCrossCoinTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext("2d");
+
+  const grad = ctx.createRadialGradient(512, 512, 40, 512, 512, 512);
+  grad.addColorStop(0, "#ffa096");
+  grad.addColorStop(0.35, "#FA5F55");
+  grad.addColorStop(0.8, "#eb463a");
+  grad.addColorStop(1, "#cf3228");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(512, 512, 512, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.arc(512, 512, 482, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(512, 512, 452, 0, Math.PI * 2);
+  ctx.stroke();
+
+  const notchR = 452;
+  const notchLen = 14;
+  [0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4, Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4].forEach((a) => {
+    ctx.beginPath();
+    ctx.moveTo(512 + (notchR - notchLen) * Math.cos(a), 512 + (notchR - notchLen) * Math.sin(a));
+    ctx.lineTo(512 + (notchR + notchLen) * Math.cos(a), 512 + (notchR + notchLen) * Math.sin(a));
+    ctx.stroke();
+  });
+
+  ctx.save();
+  ctx.translate(512, 512);
+  ctx.scale(1, -1);
+
+  // Soft glowing center ring
+  ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+  ctx.beginPath();
+  ctx.arc(0, 0, 240, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Large Bold Embossed Cross
+  ctx.lineCap = "round";
+  const crossExtent = 180;
+
+  // Cross shadow
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.36)";
+  ctx.lineWidth = 60;
+  ctx.beginPath();
+  ctx.moveTo(-crossExtent, -crossExtent - 14);
+  ctx.lineTo(crossExtent, crossExtent - 14);
+  ctx.moveTo(crossExtent, -crossExtent - 14);
+  ctx.lineTo(-crossExtent, crossExtent - 14);
+  ctx.stroke();
+
+  // Cross white highlight
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 52;
+  ctx.beginPath();
+  ctx.moveTo(-crossExtent, -crossExtent);
+  ctx.lineTo(crossExtent, crossExtent);
+  ctx.moveTo(crossExtent, -crossExtent);
+  ctx.lineTo(-crossExtent, crossExtent);
+  ctx.stroke();
+
   ctx.restore();
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -202,7 +557,6 @@ function createCoinBackTexture() {
   canvas.height = 1024;
   const ctx = canvas.getContext("2d");
 
-  // Matching velvety coral gradient
   const grad = ctx.createRadialGradient(512, 512, 40, 512, 512, 512);
   grad.addColorStop(0, "#ff7b72");
   grad.addColorStop(0.5, "#FA5F55");
@@ -213,7 +567,6 @@ function createCoinBackTexture() {
   ctx.arc(512, 512, 512, 0, Math.PI * 2);
   ctx.fill();
 
-  // Minimalist outer hairline ring
   ctx.strokeStyle = "rgba(255, 255, 255, 0.32)";
   ctx.lineWidth = 5;
   ctx.beginPath();
@@ -226,7 +579,6 @@ function createCoinBackTexture() {
   ctx.arc(512, 512, 454, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Clean Minimalist Monogram
   ctx.save();
   ctx.translate(512, 512);
   ctx.fillStyle = "#ffffff";
@@ -253,26 +605,127 @@ function createReededRimTexture() {
   canvas.height = 64;
   const ctx = canvas.getContext("2d");
 
-  // Anodized matte coral brushed gradient
   const bgGrad = ctx.createLinearGradient(0, 0, 0, 64);
-  bgGrad.addColorStop(0, "#ff958c");
+  bgGrad.addColorStop(0, "#ffaba2");
+  bgGrad.addColorStop(0.25, "#ff857a");
   bgGrad.addColorStop(0.5, "#FA5F55");
-  bgGrad.addColorStop(1, "#c9352a");
+  bgGrad.addColorStop(0.75, "#ff857a");
+  bgGrad.addColorStop(1, "#eb6257");
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, 512, 64);
 
-  // Micro-fine vertical satin brush lines
-  for (let x = 0; x < 512; x += 3) {
-    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-    ctx.fillRect(x, 0, 1, 64);
-    ctx.fillStyle = "rgba(120, 20, 14, 0.15)";
-    ctx.fillRect(x + 1.5, 0, 1, 64);
+  const ridgeWidth = 16;
+  for (let x = 0; x < 512; x += ridgeWidth) {
+    ctx.fillStyle = "rgba(160, 40, 32, 0.28)";
+    ctx.fillRect(x, 0, 3, 64);
+
+    ctx.fillStyle = "rgba(200, 60, 50, 0.14)";
+    ctx.fillRect(x + 3, 0, 2, 64);
+
+    const plateauGrad = ctx.createLinearGradient(0, 0, 0, 64);
+    plateauGrad.addColorStop(0, "rgba(255, 250, 248, 0.98)");
+    plateauGrad.addColorStop(0.25, "rgba(255, 225, 220, 0.92)");
+    plateauGrad.addColorStop(0.5, "rgba(255, 205, 198, 0.85)");
+    plateauGrad.addColorStop(0.75, "rgba(255, 225, 220, 0.92)");
+    plateauGrad.addColorStop(1, "rgba(255, 248, 245, 0.98)");
+    ctx.fillStyle = plateauGrad;
+    ctx.fillRect(x + 5, 0, 7, 64);
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+    ctx.fillRect(x + 9, 0, 2, 64);
+
+    ctx.fillStyle = "rgba(180, 50, 42, 0.18)";
+    ctx.fillRect(x + 12, 0, 4, 64);
+  }
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.fillRect(0, 0, 512, 3);
+  ctx.fillRect(0, 61, 512, 3);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.repeat.set(4, 1);
+  return texture;
+}
+
+function createReededRimNormalMap() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+
+  const imgData = ctx.createImageData(512, 64);
+  const data = imgData.data;
+
+  const ridgeWidth = 16;
+  for (let x = 0; x < 512; x++) {
+    const rx = (x % ridgeWidth) / ridgeWidth;
+
+    let nx = 0;
+    let ny = 0;
+    let nz = 1;
+
+    if (rx >= 0.08 && rx < 0.46) {
+      nx = -0.78;
+      nz = 0.62;
+    } else if (rx >= 0.54 && rx < 0.92) {
+      nx = 0.78;
+      nz = 0.62;
+    } else {
+      nx = 0;
+      nz = 1;
+    }
+
+    const r = Math.round(((nx + 1) / 2) * 255);
+    const g = Math.round(((ny + 1) / 2) * 255);
+    const b = Math.round(((nz + 1) / 2) * 255);
+
+    for (let y = 0; y < 64; y++) {
+      const idx = (y * 512 + x) * 4;
+      data[idx] = r;
+      data[idx + 1] = g;
+      data[idx + 2] = b;
+      data[idx + 3] = 255;
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.repeat.set(4, 1);
+  return texture;
+}
+
+function createReededRimBumpMap() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#000000";
+  ctx.fillRect(0, 0, 512, 64);
+
+  const ridgeWidth = 16;
+  for (let x = 0; x < 512; x += ridgeWidth) {
+    const toothGrad = ctx.createLinearGradient(x, 0, x + ridgeWidth, 0);
+    toothGrad.addColorStop(0, "#000000");
+    toothGrad.addColorStop(0.2, "#333333");
+    toothGrad.addColorStop(0.42, "#ffffff");
+    toothGrad.addColorStop(0.58, "#ffffff");
+    toothGrad.addColorStop(0.8, "#333333");
+    toothGrad.addColorStop(1, "#000000");
+
+    ctx.fillStyle = toothGrad;
+    ctx.fillRect(x, 0, ridgeWidth, 64);
   }
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.repeat.set(16, 1);
+  texture.repeat.set(4, 1);
   return texture;
 }
 
@@ -280,9 +733,16 @@ export default function HeroCoins3D() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [labels, setLabels] = useState([]);
+  const [skillLabels, setSkillLabels] = useState([]);
+  const [achievementLabels, setAchievementLabels] = useState([]);
   const [hoveredId, setHoveredId] = useState(null);
+  const [hoveredSkillId, setHoveredSkillId] = useState(null);
+  const [hoveredAchievementId, setHoveredAchievementId] = useState(null);
+  const [activeSecondaryMode, setActiveSecondaryMode] = useState(null); // null | "skills" | "achievements"
+  const [activeSecondaryProgress, setActiveSecondaryProgress] = useState(0);
+  const [crossPos, setCrossPos] = useState({ x: -999, y: -999 });
 
-  const orbitAngleRef = useRef(Math.PI * 1.05); // start nicely visible along arc
+  const orbitAngleRef = useRef(Math.PI * 1.05);
   const targetOrbitAngleRef = useRef(Math.PI * 1.05);
   const lastScrollTimeRef = useRef(0);
   const lastPointerAngleRef = useRef(0);
@@ -293,9 +753,26 @@ export default function HeroCoins3D() {
   const hasDraggedRef = useRef(false);
   const hoveredRef = useRef(null);
   hoveredRef.current = hoveredId;
+  const hoveredSkillRef = useRef(null);
+  hoveredSkillRef.current = hoveredSkillId;
+  const hoveredAchievementRef = useRef(null);
+  hoveredAchievementRef.current = hoveredAchievementId;
+  const activeSecondaryModeRef = useRef(null);
+  activeSecondaryModeRef.current = activeSecondaryMode;
+  const skillsProgressRef = useRef(0);
+  const achievementsProgressRef = useRef(0);
+  const sceneContextRef = useRef(null);
 
   const handleNavClick = (targetId) => {
     if (hasDraggedRef.current) return;
+    if (targetId === "skills" || targetId === "skills-2" || targetId?.includes("skills")) {
+      setActiveSecondaryMode("skills");
+      return;
+    }
+    if (targetId === "achievements" || targetId === "achievements-2" || targetId?.includes("achievements")) {
+      setActiveSecondaryMode("achievements");
+      return;
+    }
     const el = document.getElementById(targetId);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
@@ -310,11 +787,8 @@ export default function HeroCoins3D() {
     let width = container.clientWidth;
     let height = container.clientHeight;
 
-    // Three.js Scene Setup
     const scene = new THREE.Scene();
 
-    // Orthographic Camera: Ensures coins are 100% mathematically perfect circles everywhere
-    // regardless of screen position (zero wide-angle edge squeeze or distortion!)
     const camera = new THREE.OrthographicCamera(
       -width / 2,
       width / 2,
@@ -326,6 +800,8 @@ export default function HeroCoins3D() {
     camera.position.set(0, 0, 1000);
     camera.lookAt(0, 0, 0);
 
+    const raycaster = new THREE.Raycaster();
+
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
@@ -336,7 +812,7 @@ export default function HeroCoins3D() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    // Balanced Studio Lighting: luminous & smooth without harsh cutoff shadows
+    // Balanced Studio Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
@@ -356,49 +832,84 @@ export default function HeroCoins3D() {
     rimLight.position.set(200, 300, 500);
     scene.add(rimLight);
 
-    // Refined Balanced Coin Geometry (~220px diameter on desktop) with smooth 96 radial segments
+    // Primary Coin Geometry (Original Hero Size ~220px desktop diameter)
     const isMobile = width < 640;
-    const coinRadius = isMobile ? 75 : 110;
-    const coinThickness = isMobile ? 22 : 30;
-    const coinGeometry = new THREE.CylinderGeometry(
-      coinRadius,
-      coinRadius,
-      coinThickness,
+    const primaryCoinRadius = isMobile ? 75 : 110;
+    const primaryCoinThickness = isMobile ? 22 : 30;
+    const primaryCoinGeometry = new THREE.CylinderGeometry(
+      primaryCoinRadius,
+      primaryCoinRadius,
+      primaryCoinThickness,
       96
     );
-    // Rotate geometry so local +Z is the coin face normal
-    coinGeometry.rotateX(Math.PI / 2);
+    primaryCoinGeometry.rotateX(Math.PI / 2);
 
-    // Override UVs on front and back circular caps so they map directly:
-    // U = screen X (0=left, 1=right), V = screen Y (0=bottom, 1=top)
-    const pos = coinGeometry.attributes.position;
-    const uv = coinGeometry.attributes.uv;
-    const idx = coinGeometry.index;
+    const posP = primaryCoinGeometry.attributes.position;
+    const uvP = primaryCoinGeometry.attributes.uv;
+    const idxP = primaryCoinGeometry.index;
 
-    // Top cap (front face, material index 1) - flipped vertically 180deg so icons render right-side up
-    const g1 = coinGeometry.groups[1];
-    for (let i = g1.start; i < g1.start + g1.count; i++) {
-      const v = idx.getX(i);
-      const x = pos.getX(v);
-      const y = pos.getY(v);
-      uv.setXY(v, (x / coinRadius + 1) / 2, (-y / coinRadius + 1) / 2);
+    const g1P = primaryCoinGeometry.groups[1];
+    for (let i = g1P.start; i < g1P.start + g1P.count; i++) {
+      const v = idxP.getX(i);
+      const x = posP.getX(v);
+      const y = posP.getY(v);
+      uvP.setXY(v, (x / primaryCoinRadius + 1) / 2, (-y / primaryCoinRadius + 1) / 2);
     }
 
-    // Bottom cap (back face, material index 2)
-    const g2 = coinGeometry.groups[2];
-    for (let i = g2.start; i < g2.start + g2.count; i++) {
-      const v = idx.getX(i);
-      const x = pos.getX(v);
-      const y = pos.getY(v);
-      uv.setXY(v, (-x / coinRadius + 1) / 2, (-y / coinRadius + 1) / 2);
+    const g2P = primaryCoinGeometry.groups[2];
+    for (let i = g2P.start; i < g2P.start + g2P.count; i++) {
+      const v = idxP.getX(i);
+      const x = posP.getX(v);
+      const y = posP.getY(v);
+      uvP.setXY(v, (-x / primaryCoinRadius + 1) / 2, (-y / primaryCoinRadius + 1) / 2);
     }
-    uv.needsUpdate = true;
+    uvP.needsUpdate = true;
 
+    // Secondary Skill & Achievement Coin Geometry (Enlarged hero presence: 176px desktop diameter, 124px mobile)
+    const secondaryCoinRadius = isMobile ? 62 : 88;
+    const secondaryCoinThickness = isMobile ? 18 : 24;
+    const secondaryCoinGeometry = new THREE.CylinderGeometry(
+      secondaryCoinRadius,
+      secondaryCoinRadius,
+      secondaryCoinThickness,
+      80
+    );
+    secondaryCoinGeometry.rotateX(Math.PI / 2);
+
+    const posS = secondaryCoinGeometry.attributes.position;
+    const uvS = secondaryCoinGeometry.attributes.uv;
+    const idxS = secondaryCoinGeometry.index;
+
+    const g1S = secondaryCoinGeometry.groups[1];
+    for (let i = g1S.start; i < g1S.start + g1S.count; i++) {
+      const v = idxS.getX(i);
+      const x = posS.getX(v);
+      const y = posS.getY(v);
+      uvS.setXY(v, (x / secondaryCoinRadius + 1) / 2, (-y / secondaryCoinRadius + 1) / 2);
+    }
+
+    const g2S = secondaryCoinGeometry.groups[2];
+    for (let i = g2S.start; i < g2S.start + g2S.count; i++) {
+      const v = idxS.getX(i);
+      const x = posS.getX(v);
+      const y = posS.getY(v);
+      uvS.setXY(v, (-x / secondaryCoinRadius + 1) / 2, (-y / secondaryCoinRadius + 1) / 2);
+    }
+    uvS.needsUpdate = true;
+
+    // Rim & Back Materials
     const rimTexture = createReededRimTexture();
+    const rimNormalMap = createReededRimNormalMap();
+    const rimBumpMap = createReededRimBumpMap();
+
     const sideMaterial = new THREE.MeshStandardMaterial({
       map: rimTexture,
-      metalness: 0.35,
-      roughness: 0.38,
+      normalMap: rimNormalMap,
+      normalScale: new THREE.Vector2(2.8, 1.0),
+      bumpMap: rimBumpMap,
+      bumpScale: 2.0,
+      metalness: 0.32,
+      roughness: 0.32,
     });
 
     const backTexture = createCoinBackTexture();
@@ -408,7 +919,7 @@ export default function HeroCoins3D() {
       roughness: 0.35,
     });
 
-    // Create Coin Meshes
+    // Create Main Coin Meshes (Primary Hero Size)
     const coinMeshes = COIN_TYPES.map((item) => {
       const frontTexture = createCoinTexture(item);
       const frontMaterial = new THREE.MeshStandardMaterial({
@@ -417,15 +928,68 @@ export default function HeroCoins3D() {
         roughness: 0.35,
       });
 
-      // Cylinder material slots: [0: side rim, 1: top cap (front), 2: bottom cap (back)]
       const materials = [sideMaterial, frontMaterial, backMaterial];
-      const mesh = new THREE.Mesh(coinGeometry, materials);
-
+      const mesh = new THREE.Mesh(primaryCoinGeometry, materials);
       scene.add(mesh);
-      return { mesh, item };
+      return { mesh, item, frontTexture };
     });
 
-    // Handle Resize with Orthographic Camera bounds
+    // Create Secondary Skill Coin Meshes (Secondary Compact Size across 3 concentric rows)
+    const smallCoinMeshes = SKILL_ITEMS.map((item) => {
+      const frontTexture = createSkillCoinTexture(item);
+      const frontMaterial = new THREE.MeshStandardMaterial({
+        map: frontTexture,
+        metalness: 0.16,
+        roughness: 0.35,
+      });
+
+      const materials = [sideMaterial, frontMaterial, backMaterial];
+      const mesh = new THREE.Mesh(secondaryCoinGeometry, materials);
+      mesh.scale.set(0, 0, 0);
+      scene.add(mesh);
+      return { mesh, item, frontTexture };
+    });
+
+    // Create Secondary Achievement Coin Meshes (Secondary Compact Size across 3 concentric rows)
+    const achievementCoinMeshes = ACHIEVEMENT_ITEMS.map((item) => {
+      const frontTexture = createAchievementCoinTexture(item);
+      const frontMaterial = new THREE.MeshStandardMaterial({
+        map: frontTexture,
+        metalness: 0.16,
+        roughness: 0.35,
+      });
+
+      const materials = [sideMaterial, frontMaterial, backMaterial];
+      const mesh = new THREE.Mesh(secondaryCoinGeometry, materials);
+      mesh.scale.set(0, 0, 0);
+      scene.add(mesh);
+      return { mesh, item, frontTexture };
+    });
+
+    // Create Big Center Cross Coin Mesh (Primary Hero Size at Center of Wheel)
+    const crossTexture = createCrossCoinTexture();
+    const crossFrontMaterial = new THREE.MeshStandardMaterial({
+      map: crossTexture,
+      metalness: 0.16,
+      roughness: 0.35,
+    });
+    const centerCrossMesh = new THREE.Mesh(primaryCoinGeometry, [
+      sideMaterial,
+      crossFrontMaterial,
+      backMaterial,
+    ]);
+    centerCrossMesh.scale.set(0, 0, 0);
+    scene.add(centerCrossMesh);
+
+    sceneContextRef.current = {
+      camera,
+      raycaster,
+      coinMeshes,
+      smallCoinMeshes,
+      achievementCoinMeshes,
+      centerCrossMesh,
+    };
+
     const handleResize = () => {
       if (!container) return;
       width = container.clientWidth;
@@ -438,12 +1002,16 @@ export default function HeroCoins3D() {
       camera.updateProjectionMatrix();
 
       renderer.setSize(width, height);
+
+      // Wheel Center: placed a little below the top right corner so top right of wheel is off-screen
+      const isMob = width < 640;
+      const cwx = width >= 768 ? width * 0.42 : width * 0.35;
+      const cwy = isMob ? height * 0.30 : height * 0.34;
+      setCrossPos({ x: width / 2 + cwx, y: height / 2 - cwy });
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Raycaster for 3D coin hovering & clicking
-    const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(-999, -999);
     const clientMouse = { x: -999, y: -999 };
 
@@ -459,19 +1027,17 @@ export default function HeroCoins3D() {
       clientMouse.x = e.clientX;
       clientMouse.y = e.clientY;
 
-      // Enable canvas pointer events over the coins section so dragging works,
-      // but let events pass through on the left side so text, bio and buttons are clickable
       const isOverCoins =
-        width >= 768
-          ? x >= width * 0.42 && y <= height
-          : y <= height;
+        Boolean(activeSecondaryModeRef.current) ||
+        isAnyHovered ||
+        (width >= 768 ? x >= width * 0.35 && y <= height : y <= height);
 
       canvas.style.pointerEvents = isOverCoins ? "auto" : "none";
     };
 
     window.addEventListener("pointermove", onPointerMove);
 
-    // Wheel listener: when over the coins section, scroll should scroll through the coins
+    // Wheel Scroll (rotates wheel in both main and secondary modes)
     const handleWheel = (e) => {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
@@ -479,17 +1045,13 @@ export default function HeroCoins3D() {
       const y = e.clientY - rect.top;
 
       const isOverCoins =
+        Boolean(activeSecondaryModeRef.current) ||
         isAnyHovered ||
-        (width >= 768
-          ? x >= width * 0.42 && y >= 0 && y <= height
-          : y >= 0 && y <= height * 0.75);
+        (width >= 768 ? x >= width * 0.35 && y >= 0 && y <= height : y >= 0 && y <= height * 0.85);
 
       if (isOverCoins) {
-        // Prevent default window scrolling when hovering over the coins section
         e.preventDefault();
-        // Reversed direction: scrolling down advances coins along the opposite arc direction
         const rawDelta = e.deltaY + (e.deltaX || 0);
-        // Clamp each wheel tick delta with slightly faster rate
         const clampedDelta = Math.max(-120, Math.min(120, rawDelta));
         const scrollDelta = clampedDelta * 0.00115;
         targetOrbitAngleRef.current -= scrollDelta;
@@ -507,61 +1069,108 @@ export default function HeroCoins3D() {
       const dt = Math.min(now - lastTime, 100);
       lastTime = now;
 
-      // Center top-right of screen for orbit arc
-      const centerTopRightX = width / 2;
-      const centerTopRightY = height / 2;
+      // Smooth progress interpolation (0.0 = main wheel mode, 1.0 = secondary mode)
+      const targetSkills = activeSecondaryModeRef.current === "skills" ? 1.0 : 0.0;
+      const targetAchievements = activeSecondaryModeRef.current === "achievements" ? 1.0 : 0.0;
 
-      // Sweep arc radius
-      const orbitRadius = Math.min(width * 0.38, 570);
-      const total = coinMeshes.length;
+      skillsProgressRef.current += (targetSkills - skillsProgressRef.current) * 0.075;
+      achievementsProgressRef.current += (targetAchievements - achievementsProgressRef.current) * 0.075;
 
-      // Check raycast intersection
+      const sp = skillsProgressRef.current;
+      const ap = achievementsProgressRef.current;
+      const secP = Math.max(sp, ap);
+      const ep = secP < 0.5 ? 4 * secP * secP * secP : 1 - Math.pow(-2 * secP + 2, 3) / 2;
+      setActiveSecondaryProgress(secP);
+
+      // Wheel Center: placed a little below the top right corner so top right of wheel is off-screen
+      const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
+      const centerWheelY = isMobile ? height * 0.30 : height * 0.34;
+
+      // Orbit radii (uniform equidistant spacing across all tracks)
+      const baseOrbitRadius = isMobile ? 310 : 530;
+      const totalMain = coinMeshes.length;
+
+      // Update Big Orange Cross position: placed at the exact center of the main wheel
+      const crossScreenX = width / 2 + centerWheelX;
+      const crossScreenY = height / 2 - centerWheelY;
+
+      // Raycast against active set
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(coinMeshes.map((c) => c.mesh));
+      let activeMeshes = coinMeshes.map((c) => c.mesh);
+      if (activeSecondaryModeRef.current === "skills" && sp > 0.4) {
+        activeMeshes = [...smallCoinMeshes.map((c) => c.mesh), centerCrossMesh];
+      } else if (activeSecondaryModeRef.current === "achievements" && ap > 0.4) {
+        activeMeshes = [...achievementCoinMeshes.map((c) => c.mesh), centerCrossMesh];
+      } else if (ep > 0.4) {
+        activeMeshes = [centerCrossMesh];
+      }
+
+      const intersects = raycaster.intersectObjects(activeMeshes);
       let currentHoveredMesh = null;
       let meshHoveredId = null;
+
       if (intersects.length > 0) {
         currentHoveredMesh = intersects[0].object;
-        const found = coinMeshes.find((c) => c.mesh === currentHoveredMesh);
-        if (found) {
-          meshHoveredId = found.item.id;
+        if (currentHoveredMesh === centerCrossMesh) {
+          meshHoveredId = "center-cross";
+        } else if (activeSecondaryModeRef.current === "skills") {
+          const found = smallCoinMeshes.find((c) => c.mesh === currentHoveredMesh);
+          if (found) meshHoveredId = found.item.id;
+        } else if (activeSecondaryModeRef.current === "achievements") {
+          const found = achievementCoinMeshes.find((c) => c.mesh === currentHoveredMesh);
+          if (found) meshHoveredId = found.item.id;
+        } else {
+          const found = coinMeshes.find((c) => c.mesh === currentHoveredMesh);
+          if (found) meshHoveredId = found.item.id;
         }
       }
 
-      isAnyHovered = Boolean(currentHoveredMesh || hoveredRef.current);
+      isAnyHovered = Boolean(
+        currentHoveredMesh ||
+        (activeSecondaryModeRef.current === "skills"
+          ? hoveredSkillRef.current
+          : activeSecondaryModeRef.current === "achievements"
+          ? hoveredAchievementRef.current
+          : hoveredRef.current)
+      );
 
-      // Orbit continuous drift: pause if any coin is hovered, being dragged, or recently scrolled
-      const isRecentlyScrolled = performance.now() - lastScrollTimeRef.current < 2500;
-      if (!isDraggingRef.current && !isAnyHovered && !isRecentlyScrolled) {
-        // Graceful slow orbit cycle ~42 seconds
-        const orbitSpeed = (2 * Math.PI) / 42000;
-        targetOrbitAngleRef.current += orbitSpeed * dt;
+      // Continuous orbital drift: circularly orbit continuously like the main coins do in the wheel!
+      // When hovered, the orbit gracefully glides rather than stopping dead.
+      if (!isDraggingRef.current) {
+        const isRecentlyScrolled = performance.now() - lastScrollTimeRef.current < 1200;
+        if (!isRecentlyScrolled) {
+          const orbitSpeed = (2 * Math.PI) / 38000;
+          const speedFactor = isAnyHovered ? 0.35 : 1.0;
+          targetOrbitAngleRef.current += orbitSpeed * dt * speedFactor;
+        }
       }
 
-      // Silky, smooth interpolation towards target orbit angle:
-      // Responsive during drag (0.22) so it follows hand immediately,
-      // and smooth & responsive (0.075) when coasting/released or scrolling
       const lerpSpeed = isDraggingRef.current ? 0.22 : 0.075;
       orbitAngleRef.current += (targetOrbitAngleRef.current - orbitAngleRef.current) * lerpSpeed;
 
+      // Update 3D Big Center Cross Mesh
+      const crossScale = Math.min(1, Math.max(0, ep * 1.15));
+      centerCrossMesh.scale.set(crossScale, crossScale, crossScale);
+      centerCrossMesh.position.set(centerWheelX, centerWheelY, 6);
+      centerCrossMesh.rotation.x = Math.sin(now * 0.002) * 0.14 * crossScale;
+      centerCrossMesh.rotation.y = Math.cos(now * 0.0016) * 0.14 * crossScale;
+
+      // 1. UPDATE MAIN WHEEL COINS
       const updatedLabels = [];
 
       coinMeshes.forEach((coinObj, idx) => {
         const { mesh, item } = coinObj;
-        const angle = orbitAngleRef.current + (idx / total) * 2 * Math.PI;
+        const angle = orbitAngleRef.current + (idx / totalMain) * 2 * Math.PI;
 
-        // Position along the circular arc in Three.js world space
-        const posX = centerTopRightX + orbitRadius * Math.cos(angle);
-        const posY = centerTopRightY + orbitRadius * Math.sin(angle);
+        const posX = centerWheelX + baseOrbitRadius * Math.cos(angle);
+        const posY = centerWheelY + baseOrbitRadius * Math.sin(angle);
 
-        // Exact screen coordinates for coin center
         const coinScreenX = width / 2 + posX;
         const coinScreenY = height / 2 - posY;
 
         const isHovered =
-          currentHoveredMesh === mesh ||
-          hoveredRef.current === item.id ||
-          meshHoveredId === item.id;
+          (currentHoveredMesh === mesh || hoveredRef.current === item.id || meshHoveredId === item.id) &&
+          secP < 0.2;
 
         let targetRotX = 0;
         let targetRotY = 0;
@@ -569,16 +1178,13 @@ export default function HeroCoins3D() {
         let targetPosZ = 0;
 
         if (isHovered) {
-          // Dynamic pronounced 3D tilt tracking the mouse cursor on hover
-          const dx = Math.max(-1.2, Math.min(1.2, (clientMouse.x - coinScreenX) / coinRadius));
-          const dy = Math.max(-1.2, Math.min(1.2, (clientMouse.y - coinScreenY) / coinRadius));
-
+          const dx = Math.max(-1.2, Math.min(1.2, (clientMouse.x - coinScreenX) / primaryCoinRadius));
+          const dy = Math.max(-1.2, Math.min(1.2, (clientMouse.y - coinScreenY) / primaryCoinRadius));
           targetRotX = dy * 0.52;
           targetRotY = -dx * 0.52;
           targetScale = 1.12;
           targetPosZ = 60;
         } else {
-          // Idle state: pronounced back and forth 3D tilt on their own
           const swayFactor = isAnyHovered ? 0.25 : 1.0;
           targetRotX = Math.sin(now * 0.0022 + idx * 1.1) * 0.38 * swayFactor;
           targetRotY = Math.cos(now * 0.0017 + idx * 1.1) * 0.32 * swayFactor;
@@ -586,39 +1192,229 @@ export default function HeroCoins3D() {
           targetPosZ = Math.sin(now * 0.002 + idx * 1.1) * 24;
         }
 
-        // Responsive easing for rotation so the increased back-and-forth tilt is vivid and smooth
         mesh.rotation.x += (targetRotX - mesh.rotation.x) * 0.20;
         mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.20;
         mesh.rotation.z = 0;
 
         const currentScale = mesh.scale.x + (targetScale - mesh.scale.x) * 0.12;
-        mesh.scale.set(currentScale, currentScale, currentScale);
-
         const currentZ = mesh.position.z + (targetPosZ - mesh.position.z) * 0.15;
-        mesh.position.set(posX, posY, currentZ);
 
-        // Position HTML label directly below the bottom edge of the coin
-        const currentRadius = coinRadius * currentScale;
-        const labelScreenX = coinScreenX;
-        const labelScreenY = coinScreenY + currentRadius + 22;
+        // Smooth convergence into the center of the wheel as ep -> 1
+        const curX = THREE.MathUtils.lerp(posX, centerWheelX, ep);
+        const curY = THREE.MathUtils.lerp(posY, centerWheelY, ep);
+        const curZ = THREE.MathUtils.lerp(currentZ, 0, ep);
 
-        const isVisibleOnScreen =
-          labelScreenX >= -120 &&
-          labelScreenX <= width + 120 &&
-          labelScreenY >= -120 &&
-          labelScreenY <= height + 120;
+        // Shrink scale to 0 when converting into the center cross
+        const scaleMult = Math.max(0, 1 - ep * 1.12);
+        mesh.scale.set(currentScale * scaleMult, currentScale * scaleMult, currentScale * scaleMult);
+        mesh.position.set(curX, curY, curZ);
 
-        if (isVisibleOnScreen) {
-          updatedLabels.push({
-            id: item.id,
-            targetId: item.targetId || item.id,
-            name: item.name,
-            x: labelScreenX,
-            y: labelScreenY,
-            isHovered,
-          });
+        if (ep < 0.25) {
+          const currentRadius = primaryCoinRadius * currentScale;
+          const labelScreenX = width / 2 + curX;
+          const labelScreenY = height / 2 - curY + currentRadius + 8;
+
+          const isVisibleOnScreen =
+            labelScreenX >= -100 &&
+            labelScreenX <= width + 100 &&
+            labelScreenY >= -50 &&
+            labelScreenY <= height + 50;
+
+          if (isVisibleOnScreen) {
+            updatedLabels.push({
+              id: item.id,
+              targetId: item.targetId || item.id,
+              name: item.name,
+              x: labelScreenX,
+              y: labelScreenY,
+              isHovered,
+              opacity: 1 - ep * 4,
+            });
+          }
         }
       });
+
+      // 2. UPDATE 3 ROWS OF SECONDARY SKILL COINS (STAGGERED HONEYCOMB STRUCTURE)
+      const updatedSkillLabels = [];
+      const rowSpacing = isMobile ? 110 : 165;
+      const outerOrbitRadius = baseOrbitRadius + rowSpacing;
+      const middleOrbitRadius = baseOrbitRadius;
+      const innerOrbitRadius = baseOrbitRadius - rowSpacing;
+
+      if (sp < 0.005) {
+        smallCoinMeshes.forEach((smallObj) => {
+          smallObj.mesh.scale.set(0, 0, 0);
+        });
+      } else {
+        smallCoinMeshes.forEach((smallObj, idx) => {
+          const { mesh, item } = smallObj;
+
+          const rowRadius =
+            item.row === 0
+              ? outerOrbitRadius
+              : item.row === 1
+              ? middleOrbitRadius
+              : innerOrbitRadius;
+
+          // Middle row (row 1) is offset by +0.5 pitch so coins nestle in the gap between row 0 and row 2
+          const angularOffset = item.row === 1 ? 0.5 : 0;
+          const angle =
+            orbitAngleRef.current +
+            ((item.indexInRow + angularOffset) / item.totalInRow) * 2 * Math.PI;
+
+          const targetOrbitX = centerWheelX + rowRadius * Math.cos(angle);
+          const targetOrbitY = centerWheelY + rowRadius * Math.sin(angle);
+
+          // Staggered expansion out from center of wheel
+          const staggerDelay = (item.row * 0.10) + (item.indexInRow * 0.012);
+          const coinP = Math.max(0, Math.min(1, (sp - staggerDelay * 0.25) / (1 - staggerDelay * 0.25 || 1)));
+          const coinEp = coinP < 0.5 ? 4 * coinP * coinP * coinP : 1 - Math.pow(-2 * coinP + 2, 3) / 2;
+
+          const curX = THREE.MathUtils.lerp(centerWheelX, targetOrbitX, coinEp);
+          const curY = THREE.MathUtils.lerp(centerWheelY, targetOrbitY, coinEp);
+
+          const coinScreenX = width / 2 + curX;
+          const coinScreenY = height / 2 - curY;
+
+          const isHovered =
+            (currentHoveredMesh === mesh || hoveredSkillRef.current === item.id || meshHoveredId === item.id) &&
+            coinEp > 0.7;
+
+          let targetRotX = 0;
+          let targetRotY = 0;
+          let targetScale = coinEp;
+          let targetPosZ = 0;
+
+          if (isHovered) {
+            const dx = Math.max(-1.2, Math.min(1.2, (clientMouse.x - coinScreenX) / secondaryCoinRadius));
+            const dy = Math.max(-1.2, Math.min(1.2, (clientMouse.y - coinScreenY) / secondaryCoinRadius));
+            targetRotX = dy * 0.52;
+            targetRotY = -dx * 0.52;
+            targetScale = 1.12 * coinEp;
+            targetPosZ = 60;
+          } else {
+            // Dynamic 3D tilt while circularly orbiting, matching main wheel coins
+            targetRotX = Math.sin(now * 0.0022 + idx * 0.7) * 0.38 * coinEp;
+            targetRotY = Math.cos(now * 0.0017 + idx * 0.7) * 0.32 * coinEp;
+            targetScale = 1.0 * coinEp;
+            targetPosZ = Math.sin(now * 0.002 + idx * 0.7) * 24 * coinEp;
+          }
+
+          mesh.rotation.x += (targetRotX - mesh.rotation.x) * 0.20;
+          mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.20;
+          mesh.rotation.z = 0;
+
+          mesh.scale.set(targetScale, targetScale, targetScale);
+          mesh.position.set(curX, curY, targetPosZ);
+
+          // Floating label snug at the bottom center of the coin
+          if (coinEp > 0.65) {
+            const currentRadius = secondaryCoinRadius * targetScale;
+            const labelY = coinScreenY + currentRadius + 10;
+            const isVisible =
+              coinScreenX >= -100 &&
+              coinScreenX <= width + 100 &&
+              coinScreenY >= -50 &&
+              coinScreenY <= height + 50;
+
+            if (isVisible) {
+              updatedSkillLabels.push({
+                id: item.id,
+                name: item.name,
+                x: coinScreenX,
+                y: labelY,
+                isHovered,
+                opacity: (coinEp - 0.65) / 0.35,
+              });
+            }
+          }
+        });
+      }
+
+      // 3. UPDATE SINGLE ORBITAL ROW OF SECONDARY ACHIEVEMENT COINS
+      const updatedAchievementLabels = [];
+      const achievementOrbitRadius = baseOrbitRadius;
+
+      if (ap < 0.005) {
+        achievementCoinMeshes.forEach((achObj) => {
+          achObj.mesh.scale.set(0, 0, 0);
+        });
+      } else {
+        achievementCoinMeshes.forEach((achObj, idx) => {
+          const { mesh, item } = achObj;
+
+          const angle =
+            orbitAngleRef.current +
+            (item.indexInRow / item.totalInRow) * 2 * Math.PI;
+
+          const targetOrbitX = centerWheelX + achievementOrbitRadius * Math.cos(angle);
+          const targetOrbitY = centerWheelY + achievementOrbitRadius * Math.sin(angle);
+
+          // Staggered expansion out from center of wheel
+          const staggerDelay = item.indexInRow * 0.035;
+          const coinP = Math.max(0, Math.min(1, (ap - staggerDelay * 0.25) / (1 - staggerDelay * 0.25 || 1)));
+          const coinEp = coinP < 0.5 ? 4 * coinP * coinP * coinP : 1 - Math.pow(-2 * coinP + 2, 3) / 2;
+
+          const curX = THREE.MathUtils.lerp(centerWheelX, targetOrbitX, coinEp);
+          const curY = THREE.MathUtils.lerp(centerWheelY, targetOrbitY, coinEp);
+
+          const coinScreenX = width / 2 + curX;
+          const coinScreenY = height / 2 - curY;
+
+          const isHovered =
+            (currentHoveredMesh === mesh || hoveredAchievementRef.current === item.id || meshHoveredId === item.id) &&
+            coinEp > 0.7;
+
+          let targetRotX = 0;
+          let targetRotY = 0;
+          let targetScale = coinEp;
+          let targetPosZ = 0;
+
+          if (isHovered) {
+            const dx = Math.max(-1.2, Math.min(1.2, (clientMouse.x - coinScreenX) / secondaryCoinRadius));
+            const dy = Math.max(-1.2, Math.min(1.2, (clientMouse.y - coinScreenY) / secondaryCoinRadius));
+            targetRotX = dy * 0.52;
+            targetRotY = -dx * 0.52;
+            targetScale = 1.12 * coinEp;
+            targetPosZ = 60;
+          } else {
+            targetRotX = Math.sin(now * 0.0022 + idx * 0.7) * 0.38 * coinEp;
+            targetRotY = Math.cos(now * 0.0017 + idx * 0.7) * 0.32 * coinEp;
+            targetScale = 1.0 * coinEp;
+            targetPosZ = Math.sin(now * 0.002 + idx * 0.7) * 24 * coinEp;
+          }
+
+          mesh.rotation.x += (targetRotX - mesh.rotation.x) * 0.20;
+          mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.20;
+          mesh.rotation.z = 0;
+
+          mesh.scale.set(targetScale, targetScale, targetScale);
+          mesh.position.set(curX, curY, targetPosZ);
+
+          // Floating label snug at the bottom center of the coin (caption as label)
+          if (coinEp > 0.65) {
+            const currentRadius = secondaryCoinRadius * targetScale;
+            const labelY = coinScreenY + currentRadius + 10;
+            const isVisible =
+              coinScreenX >= -100 &&
+              coinScreenX <= width + 100 &&
+              coinScreenY >= -50 &&
+              coinScreenY <= height + 50;
+
+            if (isVisible) {
+              updatedAchievementLabels.push({
+                id: item.id,
+                name: item.caption || item.name,
+                x: coinScreenX,
+                y: labelY,
+                isHovered,
+                opacity: (coinEp - 0.65) / 0.35,
+                url: item.url,
+              });
+            }
+          }
+        });
+      }
 
       // Update cursor style
       if (currentHoveredMesh) {
@@ -630,6 +1426,8 @@ export default function HeroCoins3D() {
       }
 
       setLabels(updatedLabels);
+      setSkillLabels(updatedSkillLabels);
+      setAchievementLabels(updatedAchievementLabels);
       renderer.render(scene, camera);
 
       animId = requestAnimationFrame(loop);
@@ -637,27 +1435,52 @@ export default function HeroCoins3D() {
 
     animId = requestAnimationFrame(loop);
 
+    const handleOpenSkillsView = () => {
+      setActiveSecondaryMode("skills");
+    };
+    const handleOpenAchievementsView = () => {
+      setActiveSecondaryMode("achievements");
+    };
+    window.addEventListener("open-skills-view", handleOpenSkillsView);
+    window.addEventListener("open-achievements-view", handleOpenAchievementsView);
+
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("open-skills-view", handleOpenSkillsView);
+      window.removeEventListener("open-achievements-view", handleOpenAchievementsView);
       renderer.dispose();
-      coinGeometry.dispose();
+      primaryCoinGeometry.dispose();
+      secondaryCoinGeometry.dispose();
       sideMaterial.dispose();
       backMaterial.dispose();
+      rimTexture.dispose();
+      rimNormalMap.dispose();
+      rimBumpMap.dispose();
+      crossFrontMaterial.dispose();
+      crossTexture.dispose();
+      coinMeshes.forEach((c) => c.frontTexture.dispose());
+      smallCoinMeshes.forEach((c) => c.frontTexture.dispose());
+      achievementCoinMeshes.forEach((c) => c.frontTexture.dispose());
+      sceneContextRef.current = null;
     };
   }, []);
 
-  // Pointer drag to spin the wheel with 1:1 circular angular tracking
+  // Pointer Drag Handlers (smooth circular dragging around wheel center)
   const handlePointerDown = (e) => {
     isDraggingRef.current = true;
     hasDraggedRef.current = false;
     dragVelocityRef.current = 0;
 
     const width = containerRef.current?.clientWidth || window.innerWidth;
-    const wheelCenterX = width;
-    const wheelCenterY = 0;
+    const height = containerRef.current?.clientHeight || 900;
+    const isMob = width < 640;
+    const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
+    const centerWheelY = isMob ? height * 0.30 : height * 0.34;
+    const wheelCenterX = width / 2 + centerWheelX;
+    const wheelCenterY = height / 2 - centerWheelY;
 
     const startAngle = Math.atan2(e.clientY - wheelCenterY, e.clientX - wheelCenterX);
     lastPointerAngleRef.current = startAngle;
@@ -686,25 +1509,25 @@ export default function HeroCoins3D() {
     }
 
     const width = containerRef.current?.clientWidth || window.innerWidth;
-    const wheelCenterX = width;
-    const wheelCenterY = 0;
+    const height = containerRef.current?.clientHeight || 900;
+    const isMob = width < 640;
+    const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
+    const centerWheelY = isMob ? height * 0.30 : height * 0.34;
+    const wheelCenterX = width / 2 + centerWheelX;
+    const wheelCenterY = height / 2 - centerWheelY;
 
     const now = performance.now();
     const dt = Math.max(now - lastPointerTimeRef.current, 8);
     const currentAngle = Math.atan2(e.clientY - wheelCenterY, e.clientX - wheelCenterX);
 
     let dAngle = currentAngle - lastPointerAngleRef.current;
-    // Unwrap angular difference
     while (dAngle > Math.PI) dAngle -= 2 * Math.PI;
     while (dAngle < -Math.PI) dAngle += 2 * Math.PI;
 
-    // Invert dAngle: dragging down/right advances wheel down/right
     const delta = -dAngle;
-
     targetOrbitAngleRef.current += delta;
     lastScrollTimeRef.current = now;
 
-    // Track smoothed angular velocity (rad/ms) for inertial release
     const instantVelocity = delta / dt;
     dragVelocityRef.current = dragVelocityRef.current * 0.6 + instantVelocity * 0.4;
 
@@ -722,21 +1545,74 @@ export default function HeroCoins3D() {
       } catch {}
     }
 
-    // Apply smooth inertial momentum from drag release
     const now = performance.now();
     const timeSinceLastMove = now - lastPointerTimeRef.current;
     if (hasDraggedRef.current && timeSinceLastMove < 80) {
-      // Clamp momentum to reasonable range so it glides smoothly without spinning wildly
       const momentum = Math.max(-0.8, Math.min(0.8, dragVelocityRef.current * 180));
       targetOrbitAngleRef.current += momentum;
       lastScrollTimeRef.current = now;
     }
 
-    // If clicked directly on coin without dragging, navigate
-    if (!hasDraggedRef.current && hoveredRef.current) {
-      const match = COIN_TYPES.find((c) => c.id === hoveredRef.current);
-      if (match) {
-        handleNavClick(match.targetId || match.id);
+    if (!hasDraggedRef.current && sceneContextRef.current) {
+      const { camera, raycaster, coinMeshes, smallCoinMeshes, achievementCoinMeshes, centerCrossMesh } = sceneContextRef.current;
+      if (canvasRef.current && camera && raycaster) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const clickCoord = new THREE.Vector2(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          -((e.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        raycaster.setFromCamera(clickCoord, camera);
+
+        if (activeSecondaryModeRef.current && centerCrossMesh) {
+          const hitCross = raycaster.intersectObject(centerCrossMesh);
+          if (hitCross.length > 0) {
+            setActiveSecondaryMode(null);
+            return;
+          }
+        }
+
+        if (activeSecondaryModeRef.current === "skills" && smallCoinMeshes) {
+          const hitMeshes = raycaster.intersectObjects(smallCoinMeshes.map((c) => c.mesh));
+          if (hitMeshes.length > 0) {
+            const el = document.getElementById("skills");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+            return;
+          }
+        }
+
+        if (activeSecondaryModeRef.current === "achievements" && achievementCoinMeshes) {
+          const hitMeshes = raycaster.intersectObjects(achievementCoinMeshes.map((c) => c.mesh));
+          if (hitMeshes.length > 0) {
+            const hit = achievementCoinMeshes.find((c) => c.mesh === hitMeshes[0].object);
+            if (hit) {
+              if (hit.item.url) {
+                window.open(hit.item.url, "_blank");
+              } else {
+                const el = document.getElementById("achievements");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }
+              return;
+            }
+          }
+        }
+
+        if (!activeSecondaryModeRef.current && coinMeshes) {
+          const hitMeshes = raycaster.intersectObjects(coinMeshes.map((c) => c.mesh));
+          if (hitMeshes.length > 0) {
+            const hit = coinMeshes.find((c) => c.mesh === hitMeshes[0].object);
+            if (hit) {
+              handleNavClick(hit.item.targetId || hit.item.id);
+              return;
+            }
+          }
+        }
+      }
+
+      if (!activeSecondaryModeRef.current && hoveredRef.current) {
+        const match = COIN_TYPES.find((c) => c.id === hoveredRef.current);
+        if (match) {
+          handleNavClick(match.targetId || match.id);
+        }
       }
     }
   };
@@ -757,27 +1633,140 @@ export default function HeroCoins3D() {
         className="absolute inset-0 w-full h-full block pointer-events-auto cursor-grab active:cursor-grabbing"
       />
 
-      {/* Floating Labels Below 3D Coins (No background pill, theme orange text) */}
+      {/* Big Orange Cross (✕) at the Exact Center of the Main Wheel */}
+      {activeSecondaryProgress > 0.02 && (
+        <button
+          type="button"
+          onClick={() => setActiveSecondaryMode(null)}
+          className="absolute z-40 flex items-center justify-center rounded-full cursor-pointer pointer-events-auto group transition-transform duration-300 hover:scale-108 active:scale-95 w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44"
+          style={{
+            left: `${crossPos.x}px`,
+            top: `${crossPos.y}px`,
+            opacity: Math.min(1, activeSecondaryProgress * 1.4),
+            transform: `translate(-50%, -50%) scale(${Math.min(1, activeSecondaryProgress * 1.15)}) rotate(${activeSecondaryProgress * 180}deg)`,
+          }}
+          aria-label={activeSecondaryMode === "achievements" ? "Close Achievements and return to main wheel" : "Close Skills and return to main wheel"}
+          title="Return to Main Wheel"
+        >
+          {/* Outer glowing pulsing aura */}
+          <div className="absolute inset-0 rounded-full bg-[#FA5F55]/20 backdrop-blur-xl border-[3px] border-[#FA5F55] shadow-[0_0_60px_rgba(250,95,85,0.8)] group-hover:shadow-[0_0_90px_rgba(250,95,85,1)] group-hover:bg-[#FA5F55]/30 ring-4 ring-[#FA5F55]/35 ring-offset-2 ring-offset-transparent transition-all duration-300" />
+
+          {/* Inner subtle glass accent */}
+          <div className="absolute inset-2.5 rounded-full border border-white/30 bg-radial from-white/10 to-transparent pointer-events-none" />
+
+          {/* Bold geometric orange cross */}
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center text-white group-hover:text-[#ffe4e1] transition-colors drop-shadow-[0_4px_16px_rgba(250,95,85,0.95)]">
+            <svg
+              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </div>
+
+          {/* Floating pill badge */}
+          <span className="absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-black tracking-widest uppercase text-white bg-stone-900/90 backdrop-blur-md px-3.5 py-1 rounded-full border border-[#FA5F55]/60 shadow-[0_4px_12px_rgba(0,0,0,0.7)] opacity-0 group-hover:opacity-100 transition-opacity">
+            {activeSecondaryMode === "achievements" ? "Close Achievements" : "Close Skills"}
+          </span>
+        </button>
+      )}
+
+      {/* Main Wheel Floating Labels */}
       {labels.map((lbl) => (
         <div
           key={lbl.id}
-          onClick={() => handleNavClick(lbl.targetId)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNavClick(lbl.targetId || lbl.id);
+          }}
           onMouseEnter={() => setHoveredId(lbl.id)}
           onMouseLeave={() => setHoveredId(null)}
-          className="absolute -translate-x-1/2 cursor-pointer z-30 transition-transform duration-200 pointer-events-auto"
+          className="absolute cursor-pointer z-30 transition-transform duration-200 pointer-events-auto flex items-center justify-center text-center"
           style={{
             left: `${lbl.x}px`,
             top: `${lbl.y}px`,
+            opacity: lbl.opacity ?? 1,
             transform: lbl.isHovered
-              ? "translate(-50%, 0) scale(1.15)"
+              ? "translate(-50%, 0) scale(1.12)"
               : "translate(-50%, 0) scale(1)",
           }}
         >
           <span
-            className={`block font-extrabold tracking-wider uppercase text-sm sm:text-base select-none transition-all duration-200 ${
+            className={`block font-extrabold tracking-wider uppercase text-sm sm:text-base select-none whitespace-nowrap text-center transition-all duration-200 ${
               lbl.isHovered
-                ? "text-[#ff786e] drop-shadow-[0_2px_10px_rgba(250,95,85,0.5)]"
-                : "text-coral drop-shadow-[0_1px_4px_rgba(250,95,85,0.25)]"
+                ? "text-[#ff786e] drop-shadow-[0_2px_10px_rgba(250,95,85,0.6)]"
+                : "text-coral drop-shadow-[0_1px_4px_rgba(250,95,85,0.3)]"
+            }`}
+          >
+            {lbl.name}
+          </span>
+        </div>
+      ))}
+
+      {/* Secondary Skill Coin Floating Labels */}
+      {skillLabels.map((lbl) => (
+        <div
+          key={lbl.id}
+          onMouseEnter={() => setHoveredSkillId(lbl.id)}
+          onMouseLeave={() => setHoveredSkillId(null)}
+          className="absolute cursor-pointer z-30 transition-transform duration-200 pointer-events-auto flex items-center justify-center text-center"
+          style={{
+            left: `${lbl.x}px`,
+            top: `${lbl.y}px`,
+            opacity: lbl.opacity ?? 1,
+            transform: lbl.isHovered
+              ? "translate(-50%, 0) scale(1.12)"
+              : "translate(-50%, 0) scale(1)",
+          }}
+        >
+          <span
+            className={`block font-extrabold tracking-wider uppercase text-xs sm:text-sm select-none whitespace-nowrap text-center transition-all duration-200 ${
+              lbl.isHovered
+                ? "text-[#ff786e] drop-shadow-[0_2px_10px_rgba(250,95,85,0.6)]"
+                : "text-coral drop-shadow-[0_1px_4px_rgba(250,95,85,0.3)]"
+            }`}
+          >
+            {lbl.name}
+          </span>
+        </div>
+      ))}
+
+      {/* Secondary Achievement Coin Floating Labels (Caption of Each Achievement as Label) */}
+      {achievementLabels.map((lbl) => (
+        <div
+          key={lbl.id}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (lbl.url) {
+              window.open(lbl.url, "_blank");
+            } else {
+              const el = document.getElementById("achievements");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          onMouseEnter={() => setHoveredAchievementId(lbl.id)}
+          onMouseLeave={() => setHoveredAchievementId(null)}
+          className="absolute cursor-pointer z-30 transition-transform duration-200 pointer-events-auto flex items-center justify-center text-center"
+          style={{
+            left: `${lbl.x}px`,
+            top: `${lbl.y}px`,
+            opacity: lbl.opacity ?? 1,
+            transform: lbl.isHovered
+              ? "translate(-50%, 0) scale(1.12)"
+              : "translate(-50%, 0) scale(1)",
+          }}
+        >
+          <span
+            className={`block font-extrabold tracking-wider uppercase text-xs sm:text-sm select-none text-center transition-all duration-200 max-w-[140px] sm:max-w-[180px] leading-snug break-words ${
+              lbl.isHovered
+                ? "text-[#ff786e] drop-shadow-[0_2px_10px_rgba(250,95,85,0.6)]"
+                : "text-coral drop-shadow-[0_1px_4px_rgba(250,95,85,0.3)]"
             }`}
           >
             {lbl.name}
@@ -787,4 +1776,3 @@ export default function HeroCoins3D() {
     </div>
   );
 }
-
