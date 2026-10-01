@@ -20,16 +20,18 @@ const COIN_TYPES = [
   { id: "contact-2", targetId: "contact", name: "Contact", type: "contact" },
 ];
 
-// 8 3D project window cards along the orbit (4 unique projects cycled twice for continuous looping)
+// 10 3D project window cards along the orbit (5 unique projects cycled twice for continuous looping)
 const PROJECT_ITEMS = [
-  { ...PROJECTS_DATA[0], orbitId: "proj-barakah-1", indexInOrbit: 0, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[1], orbitId: "proj-maildoor-1", indexInOrbit: 1, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[2], orbitId: "proj-everything-image-1", indexInOrbit: 2, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[3], orbitId: "proj-ballotguard-1", indexInOrbit: 3, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[0], orbitId: "proj-barakah-2", indexInOrbit: 4, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[1], orbitId: "proj-maildoor-2", indexInOrbit: 5, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[2], orbitId: "proj-everything-image-2", indexInOrbit: 6, totalInOrbit: 8 },
-  { ...PROJECTS_DATA[3], orbitId: "proj-ballotguard-2", indexInOrbit: 7, totalInOrbit: 8 },
+  { ...PROJECTS_DATA[0], orbitId: "proj-barakah-1", indexInOrbit: 0, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[1], orbitId: "proj-maildoor-1", indexInOrbit: 1, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[2], orbitId: "proj-everything-image-1", indexInOrbit: 2, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[3], orbitId: "proj-ballotguard-1", indexInOrbit: 3, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[4], orbitId: "proj-neuraletter-1", indexInOrbit: 4, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[0], orbitId: "proj-barakah-2", indexInOrbit: 5, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[1], orbitId: "proj-maildoor-2", indexInOrbit: 6, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[2], orbitId: "proj-everything-image-2", indexInOrbit: 7, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[3], orbitId: "proj-ballotguard-2", indexInOrbit: 8, totalInOrbit: 10 },
+  { ...PROJECTS_DATA[4], orbitId: "proj-neuraletter-2", indexInOrbit: 9, totalInOrbit: 10 },
 ];
 
 // 21 Skills arranged across 3 concentric circular orbital rows.
