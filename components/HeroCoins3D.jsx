@@ -1140,15 +1140,15 @@ export default function HeroCoins3D() {
     rimLight.position.set(200, 300, 500);
     scene.add(rimLight);
 
-    // Primary Coin Geometry (Original Hero Size ~220px desktop diameter)
+    // Primary Coin Geometry (Original Hero Size ~220px desktop diameter, sleek 96px on mobile)
     const isMobile = width < 640;
-    const primaryCoinRadius = isMobile ? 75 : 110;
-    const primaryCoinThickness = isMobile ? 22 : 30;
+    const primaryCoinRadius = isMobile ? 48 : 110;
+    const primaryCoinThickness = isMobile ? 14 : 30;
     const primaryCoinGeometry = new THREE.CylinderGeometry(
       primaryCoinRadius,
       primaryCoinRadius,
       primaryCoinThickness,
-      96
+      isMobile ? 64 : 96
     );
     primaryCoinGeometry.rotateX(Math.PI / 2);
 
@@ -1173,14 +1173,14 @@ export default function HeroCoins3D() {
     }
     uvP.needsUpdate = true;
 
-    // Secondary Skill & Achievement Coin Geometry (Enlarged hero presence: 176px desktop diameter, 124px mobile)
-    const secondaryCoinRadius = isMobile ? 62 : 88;
-    const secondaryCoinThickness = isMobile ? 18 : 24;
+    // Secondary Skill & Achievement Coin Geometry (152px desktop diameter, 72px mobile)
+    const secondaryCoinRadius = isMobile ? 36 : 76;
+    const secondaryCoinThickness = isMobile ? 11 : 21;
     const secondaryCoinGeometry = new THREE.CylinderGeometry(
       secondaryCoinRadius,
       secondaryCoinRadius,
       secondaryCoinThickness,
-      80
+      isMobile ? 56 : 80
     );
     secondaryCoinGeometry.rotateX(Math.PI / 2);
 
@@ -1278,9 +1278,9 @@ export default function HeroCoins3D() {
       return { mesh, item, frontTexture };
     });
 
-    // Flat Project Card Geometry (Large clean screenshot panel, flat 2D facing camera)
-    const cardWidth = isMobile ? 300 : 420;
-    const cardHeight = isMobile ? 188 : 262;
+    // Flat Project Card Geometry (responsive panel on mobile and desktop)
+    const cardWidth = isMobile ? 240 : 420;
+    const cardHeight = isMobile ? 150 : 262;
     const projectCardGeometry = new THREE.PlaneGeometry(cardWidth, cardHeight);
 
     // Create Flat Project Card Meshes with transparent material for opacity transitions
@@ -1399,7 +1399,7 @@ export default function HeroCoins3D() {
       const isOverCoins =
         Boolean(activeSecondaryModeRef.current) ||
         isAnyHovered ||
-        (width >= 768 ? x >= width * 0.35 && y <= height : y <= height);
+        (width >= 768 ? x >= width * 0.35 && y <= height : (y <= height * 0.70 || x >= width * 0.35));
 
       canvas.style.pointerEvents = isOverCoins ? "auto" : "none";
     };
@@ -1464,8 +1464,8 @@ export default function HeroCoins3D() {
       const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
       const centerWheelY = isMobile ? height * 0.30 : height * 0.34;
 
-      // Orbit radii (uniform equidistant spacing across all tracks)
-      const baseOrbitRadius = isMobile ? 310 : 530;
+      // Orbit radii (scaled appropriately for desktop and mobile screens)
+      const baseOrbitRadius = isMobile ? 220 : 530;
       const totalMain = coinMeshes.length;
 
       // Update Big Orange Cross position: placed at the exact center of the main wheel
@@ -1631,7 +1631,7 @@ export default function HeroCoins3D() {
 
       // 2. UPDATE 3 ROWS OF SECONDARY SKILL COINS (STAGGERED HONEYCOMB STRUCTURE)
       const updatedSkillLabels = [];
-      const rowSpacing = isMobile ? 110 : 165;
+      const rowSpacing = isMobile ? 55 : 225;
       const outerOrbitRadius = baseOrbitRadius + rowSpacing;
       const middleOrbitRadius = baseOrbitRadius;
       const innerOrbitRadius = baseOrbitRadius - rowSpacing;
@@ -1972,7 +1972,7 @@ export default function HeroCoins3D() {
       } else {
         const isMob = width < 640;
         // Circular orbit radius around the center cross
-        const contactRadius = isMob ? 260 : width >= 1280 ? 510 : 470;
+        const contactRadius = isMob ? 180 : width >= 1280 ? 510 : 470;
         // Static angles along the circular perimeter (NOT rotating)
         const midAngle = isMob ? Math.PI * 1.19 : Math.PI * 1.21;
         const angleStep = isMob ? 0.66 : width >= 1280 ? 0.60 : 0.62;
@@ -2321,17 +2321,17 @@ export default function HeroCoins3D() {
   return (
     <div
       ref={containerRef}
-      className="absolute top-0 right-0 w-screen h-[100vh] max-h-[1080px] pointer-events-none z-20 overflow-hidden select-none"
+      className="absolute top-0 right-0 w-screen h-[100dvh] max-h-[1080px] pointer-events-none z-20 overflow-hidden select-none"
       aria-label="3D Navigation Coins"
     >
-      {/* Three.js WebGL Canvas */}
+      {/* Three.js WebGL Canvas with touch-none for flawless mobile rotation dragging */}
       <canvas
         ref={canvasRef}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        className="absolute inset-0 w-full h-full block pointer-events-auto cursor-grab active:cursor-grabbing"
+        className="absolute inset-0 w-full h-full block pointer-events-auto cursor-grab active:cursor-grabbing touch-none"
       />
 
       {/* Center Interactive Navigation Hub (Visible in Main Wheel mode) */}
@@ -2351,7 +2351,7 @@ export default function HeroCoins3D() {
             targetOrbitAngleRef.current += (Math.PI * 2) / COIN_TYPES.length;
             lastScrollTimeRef.current = performance.now();
           }}
-          className="relative group flex flex-col items-center justify-center rounded-full text-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 backdrop-blur-xl border border-stone-200/70 shadow-xl overflow-hidden px-2"
+          className="relative group flex flex-col items-center justify-center rounded-full text-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 w-32 h-32 sm:w-48 sm:h-48 md:w-52 md:h-52 backdrop-blur-xl border border-stone-200/70 shadow-xl overflow-hidden px-1.5 sm:px-2"
           style={{
             background: "radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.78) 60%, rgba(255, 248, 220, 0.50) 100%)",
             boxShadow: `0 10px 40px ${THEME.rgba(0.22)}, inset 0 0 24px rgba(255, 255, 255, 0.8)`,
@@ -2440,7 +2440,7 @@ export default function HeroCoins3D() {
             e.stopPropagation();
             setActiveSecondaryMode(null);
           }}
-          className={`flex items-center justify-center rounded-full cursor-pointer group transition-transform duration-300 hover:scale-108 active:scale-95 w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 ${
+          className={`flex items-center justify-center rounded-full cursor-pointer group transition-transform duration-300 hover:scale-108 active:scale-95 w-24 h-24 sm:w-40 sm:h-40 md:w-44 md:h-44 ${
             activeSecondaryMode ? "pointer-events-auto" : "pointer-events-none"
           }`}
           aria-label={

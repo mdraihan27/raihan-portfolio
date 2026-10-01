@@ -15,10 +15,10 @@ export default function Home() {
       {/* 3D Coins orbiting across top-right corner of the whole screen */}
       <HeroCoins3D />
 
-      <div className="w-full min-h-screen relative px-4 sm:px-8 lg:px-14 xl:px-20 py-6 sm:py-8 lg:py-12 flex flex-col justify-center pointer-events-none">
+      <div className="w-full min-h-[100dvh] relative px-4 sm:px-8 lg:px-14 xl:px-20 py-4 sm:py-8 lg:py-12 flex flex-col justify-end sm:justify-center pointer-events-none">
         <main
           ref={mainRef}
-          className="w-full flex flex-col items-start pointer-events-auto"
+          className="w-full flex flex-col items-center sm:items-start pointer-events-auto pb-14 sm:pb-0"
         >
           <Me ref={meRef} />
         </main>

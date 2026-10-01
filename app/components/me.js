@@ -36,18 +36,18 @@ const Me = forwardRef(function Me(props, ref) {
               width={1792}
               height={2380}
               priority
-              className="w-auto h-auto max-w-[380px] sm:max-w-[500px] md:max-w-[620px] lg:max-w-[520px] xl:max-w-[600px] 2xl:max-w-[660px] max-h-[66vh] sm:max-h-[68vh] lg:max-h-[70vh] object-contain pointer-events-none select-none"
+              className="w-auto h-auto max-w-[280px] xs:max-w-[340px] sm:max-w-[500px] md:max-w-[620px] lg:max-w-[520px] xl:max-w-[600px] 2xl:max-w-[660px] max-h-[50vh] sm:max-h-[68vh] lg:max-h-[70vh] object-contain pointer-events-none select-none"
             />
           </div>
         </div>
 
         {/* Name & Software Engineer directly below the photo */}
-        <div className="mt-4 sm:mt-5 w-full flex flex-col items-center text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-stone-900 tracking-tight font-lobster text-center">
+        <div className="mt-3 sm:mt-5 w-full flex flex-col items-center text-center">
+          <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-stone-900 tracking-tight font-lobster text-center">
             Md. Raihan Hossen
           </h1>
           <p
-            className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-center tracking-wide"
+            className="text-base sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-center tracking-wide"
             style={{
               color: THEME.dark,
               textShadow: `0 1px 2px rgba(0, 0, 0, 0.15), 0 2px 12px ${THEME.rgba(0.4)}`,
