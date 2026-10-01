@@ -25,10 +25,10 @@ export default function Home() {
       </div>
 
       {/* Switch to Old 2D Version pill at center bottom of the screen */}
-      <div className="fixed bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none">
+      <div className="fixed bottom-4 sm:bottom-7 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none w-[calc(100%-2rem)] max-w-md sm:w-auto flex justify-center">
         <a
           href="https://old.raihanhossen.work"
-          className="group flex items-center gap-1.5 sm:gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-white/85 dark:bg-stone-900/85 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 shadow-lg shadow-black/5 hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 text-stone-600 dark:text-stone-300"
+          className="group w-full sm:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-5 py-2.5 sm:px-5 sm:py-2.5 rounded-full bg-white/85 dark:bg-stone-900/85 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 shadow-lg shadow-black/5 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] sm:hover:scale-105 active:scale-95 text-stone-600 dark:text-stone-300 text-center"
         >
           <span className="text-xs sm:text-sm font-medium">
             3D too much for you?
@@ -39,7 +39,7 @@ export default function Home() {
           >
             Switch to old version
             <svg
-              className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="w-3.5 h-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
