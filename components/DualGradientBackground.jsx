@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 
+import THEME from "@/lib/theme";
+
 export default function DualGradientBackground({ children, className = "" }) {
   // Baseline square size: 48px
   const [gridSize, setGridSize] = useState(48);
@@ -92,10 +94,10 @@ export default function DualGradientBackground({ children, className = "" }) {
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(250,95,85,0.25) ${lineWidth}px, transparent ${lineWidth}px),
-            linear-gradient(to bottom, rgba(250,95,85,0.25) ${lineWidth}px, transparent ${lineWidth}px),
-            radial-gradient(circle 500px at 20% 100%, rgba(250,95,85,0.3), transparent),
-            radial-gradient(circle 500px at 100% 80%, rgba(250,95,85,0.3), transparent)
+            linear-gradient(to right, ${THEME.rgba(0.25)} ${lineWidth}px, transparent ${lineWidth}px),
+            linear-gradient(to bottom, ${THEME.rgba(0.25)} ${lineWidth}px, transparent ${lineWidth}px),
+            radial-gradient(circle 500px at 20% 100%, ${THEME.rgba(0.3)}, transparent),
+            radial-gradient(circle 500px at 100% 80%, ${THEME.rgba(0.3)}, transparent)
           `,
           backgroundSize: `${gridSize}px ${gridSize}px, ${gridSize}px ${gridSize}px, 100% 100%, 100% 100%`,
         }}

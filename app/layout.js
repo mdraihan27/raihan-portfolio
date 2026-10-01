@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import THEME from "@/lib/theme";
 
 const SITE_URL = "https://raihanhossen.site";
 const PROFILE_IMAGE_URL = `${SITE_URL}/assets/images/raihan.png`;
@@ -95,12 +96,32 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           suppressHydrationWarning
         >
           {JSON.stringify(personJsonLd)}
         </script>
+        <style dangerouslySetInnerHTML={{ __html: `
+          :root {
+            --coral: ${THEME.primary} !important;
+            --color-coral: ${THEME.primary} !important;
+            --color-brand: ${THEME.primary} !important;
+            --color-sunset: ${THEME.primary} !important;
+            --coral-rgb: ${THEME.rgb} !important;
+            --color-coral-rgb: ${THEME.rgb} !important;
+          }
+        `}} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

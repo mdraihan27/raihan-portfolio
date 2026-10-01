@@ -6,9 +6,9 @@ export function Nav({ navItems, className, activeKey, onChangeActive, scrollCont
           className ?? ""
         }`}
     >
-      {navItems.map((navItem) => (
+      {navItems.map((navItem, idx) => (
         <NavItem
-          key={navItem.key}
+          key={navItem.key || navItem.itemName || idx}
           itemName={navItem.itemName}
           targetRef={navItem.targetRef}
           offset={navItem.offSet ?? navItem.offset ?? 0}
@@ -78,6 +78,12 @@ export function NavItem({
             window.dispatchEvent(new CustomEvent("open-skills-view"));
           } else if (itemName === "Achievements") {
             window.dispatchEvent(new CustomEvent("open-achievements-view"));
+          } else if (itemName === "Projects") {
+            window.dispatchEvent(new CustomEvent("open-projects-view"));
+          } else if (itemName === "Education") {
+            window.dispatchEvent(new CustomEvent("open-education-view"));
+          } else if (itemName === "Contact") {
+            window.dispatchEvent(new CustomEvent("open-contact-view"));
           }
         }
 
