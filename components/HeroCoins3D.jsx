@@ -1376,7 +1376,7 @@ export default function HeroCoins3D() {
       // Wheel Center: placed a little below the top right corner so top right of wheel is off-screen
       const isMob = width < 640;
       const cwx = width >= 768 ? width * 0.42 : width * 0.35;
-      const cwy = isMob ? height * 0.22 : height * 0.34;
+      const cwy = isMob ? height * 0.30 : height * 0.34;
       setCrossPos({ x: width / 2 + cwx, y: height / 2 - cwy });
     };
 
@@ -1464,7 +1464,7 @@ export default function HeroCoins3D() {
 
       // Wheel Center: placed a little below the top right corner so top right of wheel is off-screen
       const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
-      const centerWheelY = isMobile ? height * 0.22 : height * 0.34;
+      const centerWheelY = isMobile ? height * 0.30 : height * 0.34;
 
       // Orbit radii (scaled appropriately for desktop and mobile screens)
       const baseOrbitRadius = isMobile ? 220 : 530;
@@ -1914,7 +1914,7 @@ export default function HeroCoins3D() {
         educationCoinMesh.visible = true;
 
         const eduScreenX = isMobile ? width * 0.50 : width / 2 + (centerWheelX - (width >= 1280 ? 380 : 320));
-        const eduScreenY = isMobile ? height * 0.42 : height / 2 - (centerWheelY - (height >= 800 ? 230 : 180));
+        const eduScreenY = isMobile ? height * 0.36 : height / 2 - (centerWheelY - (height >= 800 ? 230 : 180));
 
         const eduX = eduScreenX - width / 2;
         const eduY = height / 2 - eduScreenY;
@@ -2136,7 +2136,7 @@ export default function HeroCoins3D() {
     const height = containerRef.current?.clientHeight || 900;
     const isMob = width < 640;
     const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
-    const centerWheelY = isMob ? height * 0.22 : height * 0.34;
+    const centerWheelY = isMob ? height * 0.30 : height * 0.34;
     const wheelCenterX = width / 2 + centerWheelX;
     const wheelCenterY = height / 2 - centerWheelY;
 
@@ -2170,7 +2170,7 @@ export default function HeroCoins3D() {
     const height = containerRef.current?.clientHeight || 900;
     const isMob = width < 640;
     const centerWheelX = width >= 768 ? width * 0.42 : width * 0.35;
-    const centerWheelY = isMob ? height * 0.22 : height * 0.34;
+    const centerWheelY = isMob ? height * 0.30 : height * 0.34;
     const wheelCenterX = width / 2 + centerWheelX;
     const wheelCenterY = height / 2 - centerWheelY;
 
